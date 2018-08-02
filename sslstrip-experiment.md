@@ -1,6 +1,6 @@
 
 ## Background
-
+ 
 SSLstrip is an attack on HTTPS that allows an attacker to intercept the plaintext contents of an exchange that would normally be confidential. It involves two steps:
 
 1. The attacker mounts a man-in-the-middle attack so that traffic from the target device will be sent through the attacker.
