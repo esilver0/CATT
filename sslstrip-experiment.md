@@ -223,7 +223,7 @@ sudo tcpdump -i eth1 tcp
 
 Finally, in the Firefox running in NoVNC, reload the web page at 
 
-https://www.nyu.edu
+http://www.nyu.edu
 
 Verify that the page loads (it should still be over HTTPS). You should see traffic in the `tcpdump` that runs on the attacker, but not on the `tcpdump` that runs on the router. Once you've verified this, you can stop both `tcpdump` instances.
 
@@ -249,7 +249,7 @@ to start the SSL stripping proxy.
 
 In the Firefox window where NoVNC is running, visit
 
-https://www.nyu.edu 
+http://www.nyu.edu 
 
 again.
 
