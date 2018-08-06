@@ -33,7 +33,7 @@ On the client node, run
 vncserver :0  
 ```
 
-and enter a password (twice) when prompted. (Nothing will appear as you type the password.) Choose "n" when asked to enter a view-only password. After a few seconds and a few lines of output, you should be returned to your terminal prompt:
+and enter a password (twice) when prompted. (Nothing will appear as you type the password.) **Choose "n"** when asked to enter a view-only password. After a few seconds and a few lines of output, you should be returned to your terminal prompt:
 
 ```
 ffund01@client:~$ vncserver :0
