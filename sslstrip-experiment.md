@@ -149,7 +149,7 @@ sudo tcpdump -i eth1
 
 and in the Firefox instance running in NoVNC, visit
 
-http://www.nyu.edu
+https://www.nyu.edu
 
 Make sure that the page loads, and make sure you can see exchange in your `tcpdump` window - this is how you know that traffic for this host is going through the router via the experiment network, and not through the control interface on the client. Once you have verified this, you can stop the `tcpdump` on the router.
 
