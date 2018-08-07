@@ -149,7 +149,7 @@ sudo tcpdump -i eth1
 
 and in the Firefox instance running in NoVNC, visit
 
-~~http://www.~~nyu.edu
+<s>http://www.</s>nyu.edu
 or try
 http://nyu.edu
 
