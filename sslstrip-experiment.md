@@ -115,7 +115,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 216.165.47.10  192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
 </pre>
 
-For return traffic from nyu.edu to the client to reach the client, we'll also need to set up NAT on the router. Open an SSH session to the router node, and run
+For return traffic from nyu.edu to the client to reach the attacker, we'll also need to set up NAT on the router. Open an SSH session to the router node, and run
 
 <pre>
 sudo iptables -A FORWARD -o eth0 -i eth1 -s 192.168.0.0/24 -m conntrack --ctstate NEW -j ACCEPT  
