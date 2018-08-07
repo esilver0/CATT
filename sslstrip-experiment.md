@@ -62,7 +62,7 @@ and then
 
 <pre>
 cd noVNC/
-screen ./utils/launch.sh --vnc <b>client.sslstrip.ch-geni-net.instageni.maxgigapop.net</b>:5900
+<s>screen</s> ./utils/launch.sh --vnc <b>client.sslstrip.ch-geni-net.instageni.maxgigapop.net</b>:5900
 </pre>
 
 where in place of the bold part above, you use the hostname shown for the "client" node in the GENI Portal.
