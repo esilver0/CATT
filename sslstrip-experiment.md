@@ -62,7 +62,7 @@ and then
 
 <pre>
 cd noVNC/
-<s>screen</s> ./utils/launch.sh --vnc <b>client.sslstrip.ch-geni-net.instageni.maxgigapop.net</b>:5900
+screen ./utils/launch.sh --vnc <b>client.sslstrip.ch-geni-net.instageni.maxgigapop.net</b>:5900
 </pre>
 
 where in place of the bold part above, you use the hostname shown for the "client" node in the GENI Portal.
@@ -74,6 +74,7 @@ Navigate to this URL:
 
     http://client.sslstrip.ch-geni-net.instageni.maxgigapop.net:6080/vnc.html?host=client.sslstrip.ch-geni-net.instageni.maxgigapop.net&port=6080
 ```
+You should not press Ctrl‑C. If you do, rerun the last command. To leave the screen without ending it press Ctrl‑A, then Ctrl‑D.
 
 Open this URL in a browser. (A recent version of Google Chrome is recommended.) Enter a password when prompted. Then, at the terminal, run
 
@@ -149,9 +150,7 @@ sudo tcpdump -i eth1
 
 and in the Firefox instance running in NoVNC, visit
 
-<s>http://www.</s>nyu.edu
-or try
-http://nyu.edu
+http://www.nyu.edu or nyu.edu
 
 Make sure that the page loads, and make sure you can see exchange in your `tcpdump` window - this is how you know that traffic for this host is going through the router via the experiment network, and not through the control interface on the client. Once you have verified this, you can stop the `tcpdump` on the router.
 
@@ -159,7 +158,9 @@ You should also verify that the page is loaded over HTTPS - the browser will sho
 
 ![](/blog/content/images/2018/03/sslstrip-no-attack.png)
 
-Even though we didn't specify HTTPS in the address bar, the web server at nyu.edu is configured to use HTTPS for all connections, so the page will be loaded over HTTPS.
+If it does not load over HTTPS refresh the page.  
+
+Even though we didn't specify HTTPS in the address bar, the web server at nyu.edu is configured to use HTTPS for all connections, so the page will be loaded over HTTPS. 
 
 ### Execute the man-in-the-middle attack
 
@@ -251,12 +252,51 @@ to start the SSL stripping proxy.
 
 In the Firefox window where NoVNC is running, visit
 
-http://www.nyu.edu 
+nyu.edu 
 
 again.
 
-
+If the page loads over HTTPS, you may need to disable HSTS in firefox. See NOTES.
 
 ## Notes
+
+### Disabling HSTS
+
+The following won't actually disable HSTS, but this should stop HSTS from protecting against SSLstrip when visiting nyu.edu.
+
+
+In the firefox session go to 
+
+```
+about:config
+```
+
+Select I accept the risk. Search for `network.stricttransportsecurity.preloadlist`. Double-click on it to toggle it to false.
+
+Then go to 
+
+```
+about:support
+```
+
+Copy the file location to the right of "Profile Directory" and "Open Directory". Close all the tabs in Firefox. You could also in another client session run `killall firefox`
+
+Run 
+
+<pre>
+nano <b>/users/ers595/.mozilla/firefox/70y24mrv.default</b>/SiteSecurityServiceState.txt
+</pre>
+You need to clear any line containg nyu. You can clear the entire file if you want.
+
+After saving the changes, run
+
+```
+firefox
+```
+
+in the browser.
+
+>*Note: If you clear the file while firefox is running or before SSLstrip is enabled you might need clear the file for nyu.edu again.*
+
 
 ### Exercise
