@@ -279,7 +279,7 @@ Then go to
 about:support
 ```
 
-Copy the file location to the right of "Profile Directory" and "Open Directory". Close all the tabs in Firefox. You could also in another client session run `killall firefox`
+Copy the file location to the right of "Profile Directory" and "Open Directory". Then close all the tabs in Firefox. You could also in another client session run `killall firefox`
 
 Run 
 
