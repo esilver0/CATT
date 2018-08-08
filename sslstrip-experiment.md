@@ -286,6 +286,8 @@ Run
 <pre>
 nano <b>/users/ers595/.mozilla/firefox/70y24mrv.default</b>/SiteSecurityServiceState.txt
 </pre>
+Replace the part in bold with the file location.
+
 You need to clear any line containg nyu. You can clear the entire file if you want.
 
 After saving the changes, run
