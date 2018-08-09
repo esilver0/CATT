@@ -100,8 +100,9 @@ By default, if you visit https://witestlab.poly.edu in the Firefox browser that'
 Open another SSH session to the client, and in it, run
 
 ```
+sudo route add -host $(dig +short witestlab.poly.edu) gw 192.168.0.1
 sudo route add -host $(dig +short nyu.edu) gw 192.168.0.1
-sudo route add -host $(dig +short witest.poly.edu) gw 192.168.0.1
+sudo route add -host $(dig +short google.com) gw 192.168.0.1
 ```
 
 to have traffic for nyu.edu routed through the router on the experiment interface, 192.168.0.1. (When you run this command, the `$(dig +short witestlab.poly.edu)` variable will be filled in automatically with the actual IP address of the website - the `dig` command is used to resolve the hostname to its IP address.)
@@ -153,7 +154,7 @@ sudo tcpdump -i eth1
 
 and in the Firefox instance running in NoVNC, visit
 
-http://www.nyu.edu or nyu.edu
+http://witestlab.poly.edu
 
 Make sure that the page loads, and make sure you can see exchange in your `tcpdump` window - this is how you know that traffic for this host is going through the router via the experiment network, and not through the control interface on the client. Once you have verified this, you can stop the `tcpdump` on the router.
 
@@ -161,9 +162,7 @@ You should also verify that the page is loaded over HTTPS - the browser will sho
 
 ![](/blog/content/images/2018/03/sslstrip-no-attack.png)
 
-If it does not load over HTTPS refresh the page.  
-
-Even though we didn't specify HTTPS in the address bar, the web server at nyu.edu is configured to use HTTPS for all connections, so the page will be loaded over HTTPS. 
+Even though we didn't specify HTTPS in the address bar, the web server at witestlab.poly.edu is configured to use HTTPS for all connections, so the page will be loaded over HTTPS. 
 
 ### Execute the man-in-the-middle attack
 
@@ -229,7 +228,7 @@ sudo tcpdump -i eth1 tcp
 
 Finally, in the Firefox running in NoVNC, reload the web page at 
 
-http://www.nyu.edu
+http://witestlab.poly.edu
 
 Verify that the page loads (it should still be over HTTPS). You should see traffic in the `tcpdump` that runs on the attacker, but not on the `tcpdump` that runs on the router. Once you've verified this, you can stop both `tcpdump` instances.
 
@@ -254,50 +253,34 @@ screen sslstrip -l 10000
 to start the SSL stripping proxy.
 
 
-### Circumventing HSTS
+In the Firefox window where NoVNC is running, visit
 
-In the firefox session enter
 
-```
-about:config
-```
+http://nyu.edu.
 
-in the address bar.
+for the first time.
 
-Select I accept the risk. Search for `network.stricttransportsecurity.preloadlist`. Double-click on it to toggle it to false.
+Notice that the connection is over HTTP. If you connect to nyu.edu in another window where NoVNC is not running, you will see that the connection is over HTTPS.
 
-Then go to 
-
-```
-about:support
-```
-
-Copy the file location to the right of "Profile Directory" and "Open Directory". Then close all the tabs in Firefox. You could also run in another "client" session `killall firefox`
-
-Run 
-
-<pre>
-nano <b>/users/ers595/.mozilla/firefox/70y24mrv.default</b>/SiteSecurityServiceState.txt
-</pre>
-Replace the part in bold with the file location.
-
-You need to clear any line containg nyu. You can clear the entire file if you want.
-
->*Note: If you clear the file while firefox is running or before SSLstrip is enabled you might need to clear the file for nyu.edu again.*
-
-After saving the changes, run
-
-```
-firefox
-```
-
-in the browser.
 
 In the Firefox window where NoVNC is running, visit
 
-nyu.edu 
 
-again.
+http://witest.poly.edu
+
+for the third time. 
+
+You will notice there is still an HTTPS connection even though SSLstrip is enabled. This is becuase of HSTS which helps to mitigate SSLstrip by preventing your connection from being downgraded to HTTP once you have already made a secure connection.
+
+
+In the Firefox window where NoVNC is running, visit
+
+
+http://google.com
+
+for the first time. 
+
+You will notice there is an HTTPS connection even though you have never visited google.com in this browser on the "client" before. There is an HSTS preload list that comes with your browser. Any website on this list will not establish an HTTP (insecure) connection even if you visit the site for the first time.
 
 ## Notes
 
