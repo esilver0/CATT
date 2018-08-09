@@ -300,6 +300,8 @@ screen -Dr
 
 ### Circumventing HSTS
 
+**WARNING:** Make sure this is in the Firefox window where NoVNC is running and not the address bar for your browser. If you are not sure, restart the experiment and do not attempt to circumvent HSTS.
+
 In the firefox session enter
 
 ```
