@@ -75,7 +75,7 @@ Navigate to this URL:
     http://client.sslstrip.ch-geni-net.instageni.maxgigapop.net:6080/vnc.html?host=client.sslstrip.ch-geni-net.instageni.maxgigapop.net&port=6080
 ``` 
 
-If you press Ctrl‑C, rerun the command. To detach or reattach, see [Notes](#notes)
+If you press Ctrl‑C, rerun the command. To detach or reattach, see [Notes](#notes).
 
 Open this URL in a browser. (A recent version of Google Chrome is recommended.) Enter a password when prompted. Then, at the terminal, run
 
