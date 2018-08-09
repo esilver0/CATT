@@ -342,8 +342,6 @@ Verify that there is an HTTPS connection and that youtube.com is on the [list](h
 
 
 
-
-
 ### Expand the experiment
 To attempt this with other websites on the client, run
 
@@ -354,7 +352,11 @@ replacing the part in bold with the website. Then visit the site in the browser 
 
 
 
+## Results
 
+Any connection made to a website not on the HSTS preload list is still vulnerable to SSLstrip. 
+
+To prevent against SSLstrip completely, the browser would have to block all non-secure requests (block HTTP). 
 
 
 ## Notes
