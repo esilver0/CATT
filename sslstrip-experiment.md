@@ -375,7 +375,7 @@ nano <b>/users/ers595/.mozilla/firefox/70y24mrv.default</b>/SiteSecurityServiceS
 Replace the part in bold with the file location.
 
 *See WARNING above before proceeding* \
-Clear any line containg the websites you want to remove.
+Clear any line containing the websites you want to remove.
 
 
 Save the changes, then run
