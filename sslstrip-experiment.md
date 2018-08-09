@@ -309,7 +309,7 @@ once more.
 
 **Visting a site on the HSTS preload list**
 
-There is an HSTS preload list that comes with your browser. Your browser will not accept an HTTP (insecure) request from any website on this list even if you are visiting the site for the first time. 
+There is an [HSTS preload list](https://hg.mozilla.org/releases/mozilla-release/file/tip/security/manager/ssl/nsSTSPreloadList.inc) that comes with your browser. Your browser will not accept an HTTP (insecure) request from any website on this list even if you are visiting the site for the first time. 
 
 In the Firefox window where NoVNC is running, visit
 
@@ -317,7 +317,7 @@ http://youtube.com
 
 for the first time. 
 
-Verify that there is HTTPS connection.
+Verify that there is an HTTPS connection and that youtube.com is on the [list](https://hg.mozilla.org/releases/mozilla-release/file/tip/security/manager/ssl/nsSTSPreloadList.inc).
 
 
 
