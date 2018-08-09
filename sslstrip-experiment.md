@@ -259,47 +259,25 @@ In the Firefox window where NoVNC is running, visit
 
 http://nyu.edu.
 
-Notice that the connection is over HTTP.
+Notice that the connection is over HTTP. The SSLstrip has worked.
 
 >*Note: If you visit the site before SSLstrip is enabled. See [Circumventing HSTS](#circumventing-hsts)*
 
-**Visting a site you have already been to before**
+**Visting a site you have already established a secure connectioon with**
 
-In the Firefox window where NoVNC is running, visit
-
-http://witest.poly.edu
-
-again. 
-
-You will notice there is still an HTTPS connection even though SSLstrip is enabled. This is becuase of HSTS which helps to mitigate SSLstrip by preventing your connection from being downgraded to HTTP once you already have established a secure connection.
-
-**Visting a site on the HSTS preload list**
-
-In the Firefox window where NoVNC is running, visit
-
-http://google.com
-
-for the first time. 
-
-You will notice there is an HTTPS connection even though you have never visited google.com in this browser on the "client" before. There is an HSTS preload list that comes with your browser. Any website on this list will not establish an HTTP (insecure) connection even if you have not visited the site for the first time.
-
-
-### Optional
-
-On the SSH session on the attacker, run
+On an SSH session on the attacker, run
 
 ```
 killall sslstrip
 ```
 
-to disable sslstrip.
-
+to stop the SSL stripping proxy.
 
 In the Firefox window where NoVNC is running, visit
 
 http://nyu.edu.
 
-Notice that this time the connection is over HTTPS.
+Notice that this time the connection is over HTTPS demonstrating the SSL striping proxy worked.
 
 
 Then, on the attacker node, run
@@ -316,9 +294,17 @@ http://nyu.edu
 
 once more.
 
+Verify that there is still an HTTPS connection even though SSLstrip is enabled. This is becuase of the HSTS protocal which helps to mitigate SSLstrip by instructing your browser to not downgrade to HTTP once you already have established a secure connection.
 
-Notice that this time the connection is still over HTTPS even though SSLstrip is enabled. The result is the same as witestlab.poly.edu. The HSTS protocal yet again instructs the browser not to revert to HTTP.
+**Visting a site on the HSTS preload list**
 
+In the Firefox window where NoVNC is running, visit
+
+http://google.com
+
+for the first time. 
+
+You will notice there is an HTTPS connection even though you have never visited google.com in this browser on the "client" before. There is an HSTS preload list that comes with your browser. Any website on this list will not establish an HTTP (insecure) connection even if you are visiting the site for the first time.
 
 ## Notes
 
