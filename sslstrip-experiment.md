@@ -93,7 +93,7 @@ This browser is running on the "client" node, _not_ on your own laptop. Leave th
 
 ### Redirect traffic for remote site through router
 
-In this experiment, we will attack an exchange between this client and the website https://witestlab.poly.edu.
+In this experiment, we will attack an exchange between this client and several websites.
 
 By default, if you visit https://witestlab.poly.edu in the Firefox browser that's running in NoVNC, traffic between the client and the website will go through the control interface on the client (that is used to log in to the client over SSH), not through the experiment interface. To demonstrate the SSLstrip attack, we'll want this traffic to go over the experiment network.
 
