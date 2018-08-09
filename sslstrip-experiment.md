@@ -1,7 +1,7 @@
 To reproduce this experiment on GENI, you will need an account on the [GENI Portal](http://groups.geni.net/geni/wiki/SignMeUp), and you will need to have [joined a project](http://groups.geni.net/geni/wiki/JoinAProject). You should have already [uploaded your SSH keys to the portal and know how to log in to a node with those keys](http://groups.geni.net/geni/wiki/HowTo/LoginToNodes). If you're not sure if you have those skills, you may want to try [Lab Zero](http://tinyurl.com/geni-labzero) first.
 
 * Skip to [Results]()
-* Skip to [Run my experiment]()
+* Skip to [Run my experiment](#run-my-experiment)
 
 ## Background
  
@@ -75,7 +75,7 @@ Navigate to this URL:
     http://client.sslstrip.ch-geni-net.instageni.maxgigapop.net:6080/vnc.html?host=client.sslstrip.ch-geni-net.instageni.maxgigapop.net&port=6080
 ``` 
 
-If you press Ctrl‑C, rerun the command. To detach or reattach, see [Notes](##Notes)
+If you press Ctrl‑C, rerun the command. To detach or reattach, see [Notes](#notes)
 
 Open this URL in a browser. (A recent version of Google Chrome is recommended.) Enter a password when prompted. Then, at the terminal, run
 
