@@ -300,7 +300,7 @@ screen -Dr
 
 ### Circumventing HSTS
 
-**WARNING:** Make sure this is in the Firefox window where NoVNC is running and not the address bar for your browser. If you are not sure, restart the experiment and do not attempt to circumvent HSTS.
+**WARNING:** Make sure this is in the Firefox window where NoVNC is running and not the address bar for your browser. If you are not certain, restart the experiment and do not attempt to circumvent HSTS.
 
 In the firefox session enter
 
@@ -310,7 +310,7 @@ about:support
 
 in the address bar.
 
-Copy the file location to the right of "Profile Directory" and "Open Directory". Then close all the tabs in Firefox. You could also run in another "client" session `killall firefox`
+Copy the file location to the right of "Profile Directory" and "Open Directory". Then close all the tabs in the Firefox window where NoVNC is running. You could also run in another "client" session `killall firefox`
 
 Run 
 
@@ -319,7 +319,7 @@ nano <b>/users/ers595/.mozilla/firefox/70y24mrv.default</b>/SiteSecurityServiceS
 </pre>
 Replace the part in bold with the file location.
 
-Clear any line containg nyu. *See WARNING ABOVE*
+*See WARNING above* Clear any line containg nyu.
 
 
 After saving the changes, run
@@ -330,6 +330,6 @@ firefox
 
 in the browser.
 
-As far as HSTS is concerned, it is as if we never established an HTTPS connection with the website in the first place.
+As far as HSTS is concerned, it is as if an HTTPS connection with the website was never established in the first place.
 
 ### Exercise
