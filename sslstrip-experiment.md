@@ -102,7 +102,7 @@ Open another SSH session to the client, and in it, run
 ```
 sudo route add -host $(dig +short witestlab.poly.edu) gw 192.168.0.1
 sudo route add -host $(dig +short nyu.edu) gw 192.168.0.1
-sudo route add -host $(dig +short google.com) gw 192.168.0.1
+sudo route add -host $(dig +short youtube.com) gw 192.168.0.1
 ```
 
 to have traffic for nyu.edu routed through the router on the experiment interface, 192.168.0.1. (When you run this command, the `$(dig +short witestlab.poly.edu)` variable will be filled in automatically with the actual IP address of the website - the `dig` command is used to resolve the hostname to its IP address.)
@@ -299,11 +299,11 @@ Verify that there is still an HTTPS connection even though SSLstrip is enabled. 
 
 In the Firefox window where NoVNC is running, visit
 
-http://google.com
+http://youtube.com
 
 for the first time. 
 
-You will notice there is an HTTPS connection even though you have never visited google.com in this browser on the "client" before. There is an HSTS preload list that comes with your browser. Any website on this list will not establish an HTTP (insecure) connection even if you are visiting the site for the first time.
+You will notice there is an HTTPS connection even though you have never visited youtube.com in this browser on the "client" before. There is an HSTS preload list that comes with your browser. Any website on this list will not establish an HTTP (insecure) connection even if you are visiting the site for the first time.
 
 ## Notes
 
