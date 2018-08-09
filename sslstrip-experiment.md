@@ -277,8 +277,7 @@ In the Firefox window where NoVNC is running, visit
 
 http://nyu.edu.
 
-Notice that this time the connection is over HTTPS demonstrating the SSL striping proxy worked.
-
+Notice that this time the connection is over HTTPS demonstrating that the SSLstrip attack worked.
 
 Then, on the attacker node, run
 
