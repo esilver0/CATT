@@ -121,7 +121,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 216.165.47.10   192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
 </pre>
 
-For return traffic from nyu.edu to the client to reach the router, we'll also need to set up NAT on the router. Open an SSH session to the router node, and run
+For return traffic from the websites to the client to reach the router, we'll also need to set up NAT on the router. Open an SSH session to the router node, and run
 
 <pre>
 sudo iptables -A FORWARD -o eth0 -i eth1 -s 192.168.0.0/24 -m conntrack --ctstate NEW -j ACCEPT  
@@ -294,7 +294,7 @@ once more.
 Verify that this time there is an HTTPS connection even though SSLstrip is enabled. This is becuase of the [HSTS protocal](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) which helps mitigate SSLstrip by instructing the browser to not downgrade to HTTP once a secure connection has been established. 
 
 
-*Optional: Once a site that supports HSTS has been visited with a secure connection, you can delete the history enabling SSLstrip to take effect. See [Circumventing HSTS](#circumventing-hsts)*
+*Optional: Once a site that supports HSTS has been visited with a secure connection, you can delete the history enabling SSLstrip to take effect. See [Delete HSTS history](#delete-hsts-history)*
 
 **Visting a site that does not support HSTS**
 
@@ -324,7 +324,9 @@ In the Firefox window where NoVNC is running, visit
 
 for the second time.
 
-Verify that the connection is via HTTP even thought a connection via HTTPS was already established.
+Verify that the connection is via HTTP even though a connection via HTTPS was already established.
+
+> _**Note**: In the event that the connection is via HTTPS, it is possible that the website has since started supporting HSTS. Here is a [list]() of known websites that do not support an HTTPS connection. See [Expand the experiment](expand-the-experiment) to see how to have traffic for the websites routed through the router on the experiment interface._
 
 
 **Visting a site on the HSTS preload list**
@@ -343,7 +345,7 @@ Verify that there is an HTTPS connection and that youtube.com is on the [list](h
 
 
 ### Expand the experiment
-To attempt this with other websites on the client, run
+To attempt this with other websites, run on the client
 
 <pre>
 sudo route add -host $(dig +short <b>website</b>) gw 192.168.0.1
@@ -375,9 +377,9 @@ If the SSH connection is lost, run
 screen -Dr
 ```
 
-### Circumventing HSTS
+### Delete HSTS history
 
-**WARNING:** Make sure this is in the Firefox window where NoVNC is running and not the address bar for your browser. If you are not certain, do not attempt to circumvent HSTS.
+**WARNING:** Make sure this is in the Firefox window where NoVNC is running and not the address bar for your browser. If you are not certain, do not attempt to delete HSTS history.
 
 In the firefox session enter
 
@@ -408,6 +410,6 @@ firefox
 
 in the browser.
 
-As far as HSTS is concerned, it is as if an HTTPS connection with the websites were never established in the first place. HSTS was not disabled, just the history of established connections for the individual sites were removed.
+As far as HSTS is concerned, it is as if an HTTPS connection with the websites were never established in the first place. HSTS was not disabled.
 
 ### Exercise
