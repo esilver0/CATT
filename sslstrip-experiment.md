@@ -257,11 +257,9 @@ to start the SSL stripping proxy.
 
 In the Firefox window where NoVNC is running, visit
 
-http://nyu.edu.
+http://nyu.edu
 
-Notice that the connection is over HTTP. If you go to nyu.edu in another tab on your computer you will see that the website supports HTTPS.
-
->*Note: If you visit the site before SSLstrip is enabled. See [Circumventing HSTS](#circumventing-hsts)*
+for the first time. Verify that that the connection is over HTTP. If you go to nyu.edu in another tab on your computer you will see that the website supports HTTPS.
 
 **Visting a site that you have already established a secure connection with**
 
@@ -277,7 +275,7 @@ In the Firefox window where NoVNC is running, visit
 
 http://nyu.edu.
 
-Notice that this time the connection is over HTTPS demonstrating that the SSLstrip attack worked.
+Check that this time the connection is over HTTPS demonstrating that the SSLstrip attack works.
 
 Then, on the attacker node, run
 
@@ -294,6 +292,9 @@ http://nyu.edu
 once more.
 
 Verify that there is still an HTTPS connection even though SSLstrip is enabled. This is becuase of the [HSTS protocal](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) which helps to mitigate SSLstrip by instructing your browser to not downgrade to HTTP once you already have established a secure connection. 
+
+
+*Optional: Once you visit a site with a secure connection that supports HSTS, you can delete the history enabling SSLstrip to take affect. See [Circumventing HSTS](#circumventing-hsts)*
 
 **Visting a site that does not support HSTS**
 
@@ -356,7 +357,7 @@ screen -Dr
 
 ### Circumventing HSTS
 
-**WARNING:** Make sure this is in the Firefox window where NoVNC is running and not the address bar for your browser. If you are not certain, restart the experiment and do not attempt to circumvent HSTS.
+**WARNING:** Make sure this is in the Firefox window where NoVNC is running and not the address bar for your browser. If you are not certain, do not attempt to circumvent HSTS.
 
 In the firefox session enter
 
@@ -376,7 +377,7 @@ nano <b>/users/ers595/.mozilla/firefox/70y24mrv.default</b>/SiteSecurityServiceS
 Replace the part in bold with the file location.
 
 *See WARNING above before proceeding* \
-Clear any line containg nyu.
+Clear any line containg the websites you want to remove.
 
 
 Save the changes, then run
@@ -387,6 +388,6 @@ firefox
 
 in the browser.
 
-As far as HSTS is concerned, it is as if an HTTPS connection with the website was never established in the first place.
+As far as HSTS is concerned, it is as if an HTTPS connection with the website was never established in the first place. HSTS was not disabled, just the history of established connections for the individual sites.
 
 ### Exercise
