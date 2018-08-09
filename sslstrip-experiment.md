@@ -262,9 +262,10 @@ for the first time.
 
 Notice that the connection is over HTTP. If you connect to nyu.edu in another window where NoVNC is not running, you will see that the connection is over HTTPS.
 
+>*Note: If you visit the site before SSLstrip is enabled. See the [Notes](#circumventing-hsts)
+
 
 In the Firefox window where NoVNC is running, visit
-
 
 http://witest.poly.edu
 
@@ -297,5 +298,35 @@ If the SSH connection is lost, run
 ```
 screen -Dr
 ```
+
+### Circumventing HSTS
+
+In the firefox session enter
+
+```
+about:support
+```
+
+in the address bar.
+
+Copy the file location to the right of "Profile Directory" and "Open Directory". Then close all the tabs in Firefox. You could also run in another "client" session `killall firefox`
+
+Run 
+
+<pre>
+nano <b>/users/ers595/.mozilla/firefox/70y24mrv.default</b>/SiteSecurityServiceState.txt
+</pre>
+Replace the part in bold with the file location.
+
+You need to clear any line containg nyu. You can clear the entire file if you want.
+
+
+After saving the changes, run
+
+```
+firefox
+```
+
+in the browser.
 
 ### Exercise
