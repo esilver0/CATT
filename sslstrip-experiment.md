@@ -252,6 +252,7 @@ screen sslstrip -l 10000
 
 to start the SSL stripping proxy.
 
+#### Visting a site for the first time
 
 In the Firefox window where NoVNC is running, visit
 
@@ -262,8 +263,9 @@ for the first time.
 
 Notice that the connection is over HTTP. If you connect to nyu.edu in another window where NoVNC is not running, you will see that the connection is over HTTPS.
 
->*Note: If you visit the site before SSLstrip is enabled. See the [Notes](#circumventing-hsts)
+>*Note: If you visit the site before SSLstrip is enabled. See [Circumventing HSTS](#circumventing-hsts)
 
+#### Visting a site you have already been to before
 
 In the Firefox window where NoVNC is running, visit
 
@@ -273,15 +275,15 @@ for the third time.
 
 You will notice there is still an HTTPS connection even though SSLstrip is enabled. This is becuase of HSTS which helps to mitigate SSLstrip by preventing your connection from being downgraded to HTTP once you have already made a secure connection.
 
+#### Visting a site on the HSTS preload list
 
 In the Firefox window where NoVNC is running, visit
-
 
 http://google.com
 
 for the first time. 
 
-You will notice there is an HTTPS connection even though you have never visited google.com in this browser on the "client" before. There is an HSTS preload list that comes with your browser. Any website on this list will not establish an HTTP (insecure) connection even if you visit the site for the first time.
+You will notice there is an HTTPS connection even though you have never visited google.com in this browser on the "client" before. There is an HSTS preload list that comes with your browser. Any website on this list will not establish an HTTP (insecure) connection even if you have not visited the site for the first time.
 
 ## Notes
 
@@ -300,6 +302,8 @@ screen -Dr
 ```
 
 ### Circumventing HSTS
+as far as HSTS is concerned, it is as if we never established an HTTPS connection in the first place.
+
 
 In the firefox session enter
 
