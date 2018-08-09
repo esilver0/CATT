@@ -303,7 +303,7 @@ again.
 
 ## Notes
 
-Detaching and attaching to screen
+### Detaching and attaching to screen
 
 Press Ctrl‑A then Ctrl‑D to detach from a screen without terminating the process.
 To reattach to a screen after detaching, run.
