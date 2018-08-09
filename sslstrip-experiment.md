@@ -320,10 +320,11 @@ nano <b>/users/ers595/.mozilla/firefox/70y24mrv.default</b>/SiteSecurityServiceS
 </pre>
 Replace the part in bold with the file location.
 
-*See WARNING above* Clear any line containg nyu.
+*See WARNING above before proceeding* \
+Clear any line containg nyu.
 
 
-After saving the changes, run
+Save the changes, then run
 
 ```
 firefox
