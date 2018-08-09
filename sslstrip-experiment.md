@@ -113,11 +113,12 @@ Then run
 route -n
 ```
 
-and verify that a host-specific entry appears in the routing table. For exampl:
+and verify that these host-specific entries appears in the routing table. For example:
 
 <pre>
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
-216.165.47.10  192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
+128.238.66.220  192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
+216.165.47.10   192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
 </pre>
 
 For return traffic from nyu.edu to the client to reach the router, we'll also need to set up NAT on the router. Open an SSH session to the router node, and run
