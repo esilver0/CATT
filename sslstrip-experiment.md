@@ -247,7 +247,7 @@ This will redirect traffic to port 80 (the default web port for HTTP traffic) to
 Then, on the attacker, run
 
 ```
-sslstrip -l 10000
+screen sslstrip -l 10000
 ```
 
 to start the SSL stripping proxy.
