@@ -198,7 +198,7 @@ You should see that the client has an entry for the router's IP address (192.168
 Next, on the attacker, run
 
 ```
-sudo arpspoof -i eth1 -t 192.168.0.2 192.168.0.1
+screen sudo arpspoof -i eth1 -t 192.168.0.2 192.168.0.1
 ```
 
 to start the ARP spoofing. Re-run
