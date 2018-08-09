@@ -105,7 +105,7 @@ sudo route add -host $(dig +short nyu.edu) gw 192.168.0.1
 sudo route add -host $(dig +short youtube.com) gw 192.168.0.1
 ```
 
-to have traffic for nyu.edu routed through the router on the experiment interface, 192.168.0.1. (When you run this command, the `$(dig +short witestlab.poly.edu)` variable will be filled in automatically with the actual IP address of the website - the `dig` command is used to resolve the hostname to its IP address.)
+to have traffic for the websites routed through the router on the experiment interface, 192.168.0.1. (When you run this command, the `$(dig +short witestlab.poly.edu)` variable will be filled in automatically with the actual IP address of the website - the `dig` command is used to resolve the hostname to its IP address.)
 
 Then run 
 
@@ -291,10 +291,10 @@ http://nyu.edu
 
 once more.
 
-Verify that this time there is an HTTPS connection even though SSLstrip is enabled. This is becuase of the [HSTS protocal](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) which helps to mitigate SSLstrip by instructing your browser to not downgrade to HTTP once you already have established a secure connection. 
+Verify that this time there is an HTTPS connection even though SSLstrip is enabled. This is becuase of the [HSTS protocal](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) which helps mitigate SSLstrip by instructing the browser to not downgrade to HTTP once a secure connection has been established. 
 
 
-*Optional: Once you visit a site with a secure connection that supports HSTS, you can delete the history enabling SSLstrip to take effect. See [Circumventing HSTS](#circumventing-hsts)*
+*Optional: Once a site that supports HSTS has been visited with a secure connection, you can delete the history enabling SSLstrip to take effect. See [Circumventing HSTS](#circumventing-hsts)*
 
 **Visting a site that does not support HSTS**
 
@@ -309,7 +309,7 @@ once more.
 
 **Visting a site on the HSTS preload list**
 
-There is an [HSTS preload list](https://hg.mozilla.org/releases/mozilla-release/file/tip/security/manager/ssl/nsSTSPreloadList.inc) that comes with your browser. Your browser will not accept an HTTP (insecure) request from any website on this list even if you are visiting the site for the first time. 
+There is an [HSTS preload list](https://hg.mozilla.org/releases/mozilla-release/file/tip/security/manager/ssl/nsSTSPreloadList.inc) that comes with the browser. Firefox will not accept an HTTP (insecure) request from any website on this list even if you are visiting the site for the first time. 
 
 In the Firefox window where NoVNC is running, visit
 
