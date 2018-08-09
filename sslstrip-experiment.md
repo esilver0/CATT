@@ -386,6 +386,6 @@ firefox
 
 in the browser.
 
-As far as HSTS is concerned, it is as if an HTTPS connection with the website was never established in the first place. HSTS was not disabled, just the history of established connections for the individual sites were removed.
+As far as HSTS is concerned, it is as if an HTTPS connection with the websites were never established in the first place. HSTS was not disabled, just the history of established connections for the individual sites were removed.
 
 ### Exercise
