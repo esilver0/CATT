@@ -282,7 +282,7 @@ Replace the part in bold with the file location.
 
 You need to clear any line containg nyu. You can clear the entire file if you want.
 
->*Note: If you clear the file while firefox is running or before SSLstrip is enabled you might need clear the file for nyu.edu again.*
+>*Note: If you clear the file while firefox is running or before SSLstrip is enabled you might need to clear the file for nyu.edu again.*
 
 After saving the changes, run
 
