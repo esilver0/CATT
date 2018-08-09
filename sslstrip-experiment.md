@@ -293,7 +293,7 @@ http://nyu.edu
 
 once more.
 
-Verify that there is still an HTTPS connection even though SSLstrip is enabled. This is becuase of the [HSTS protocal]() which helps to mitigate SSLstrip by instructing your browser to not downgrade to HTTP once you already have established a secure connection. 
+Verify that there is still an HTTPS connection even though SSLstrip is enabled. This is becuase of the [HSTS protocal](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) which helps to mitigate SSLstrip by instructing your browser to not downgrade to HTTP once you already have established a secure connection. 
 
 **Visting a site that does not support HSTS**
 
@@ -317,6 +317,26 @@ http://youtube.com
 for the first time. 
 
 Verify that there is HTTPS connection.
+
+
+
+
+
+
+
+
+
+### Expand the experiment
+To attempt this with other websites on the client, run
+```
+sudo route add -host $(dig +short **website**) gw 192.168.0.1
+```
+replacing the part in bold with the website. Then visit the site in the browser on the client.
+
+
+
+
+
 
 ## Notes
 
