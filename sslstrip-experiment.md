@@ -311,7 +311,7 @@ about:support
 
 in the address bar.
 
-Copy the file location to the right of "Profile Directory" and "Open Directory". Then close all the tabs in the Firefox window where NoVNC is running. You could also run in another "client" session `killall firefox`
+Copy the file location to the right of "Profile Directory" and "Open Directory". Then close all the tabs in the Firefox window where NoVNC is running. You could also in another "client" session, run `killall firefox`
 
 Run 
 
