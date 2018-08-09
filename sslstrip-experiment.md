@@ -291,10 +291,10 @@ http://nyu.edu
 
 once more.
 
-Verify that there is still an HTTPS connection even though SSLstrip is enabled. This is becuase of the [HSTS protocal](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) which helps to mitigate SSLstrip by instructing your browser to not downgrade to HTTP once you already have established a secure connection. 
+Verify that this time there is an HTTPS connection even though SSLstrip is enabled. This is becuase of the [HSTS protocal](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) which helps to mitigate SSLstrip by instructing your browser to not downgrade to HTTP once you already have established a secure connection. 
 
 
-*Optional: Once you visit a site with a secure connection that supports HSTS, you can delete the history enabling SSLstrip to take affect. See [Circumventing HSTS](#circumventing-hsts)*
+*Optional: Once you visit a site with a secure connection that supports HSTS, you can delete the history enabling SSLstrip to take effect. See [Circumventing HSTS](#circumventing-hsts)*
 
 **Visting a site that does not support HSTS**
 
@@ -309,7 +309,7 @@ once more.
 
 **Visting a site on the HSTS preload list**
 
-There is an HSTS preload list that comes with your browser. Your browser will not accept an HTTP (insecure) connection from any website on this list even if you are visiting the site for the first time. 
+There is an HSTS preload list that comes with your browser. Your browser will not accept an HTTP (insecure) request from any website on this list even if you are visiting the site for the first time. 
 
 In the Firefox window where NoVNC is running, visit
 
@@ -324,14 +324,12 @@ Verify that there is HTTPS connection.
 
 
 
-
-
-
 ### Expand the experiment
 To attempt this with other websites on the client, run
-```
-sudo route add -host $(dig +short **website**) gw 192.168.0.1
-```
+
+<pre>
+sudo route add -host $(dig +short <b>website</b>) gw 192.168.0.1
+</pre>
 replacing the part in bold with the website. Then visit the site in the browser on the client.
 
 
@@ -388,6 +386,6 @@ firefox
 
 in the browser.
 
-As far as HSTS is concerned, it is as if an HTTPS connection with the website was never established in the first place. HSTS was not disabled, just the history of established connections for the individual sites.
+As far as HSTS is concerned, it is as if an HTTPS connection with the website was never established in the first place. HSTS was not disabled, just the history of established connections for the individual sites were removed.
 
 ### Exercise
