@@ -101,6 +101,7 @@ Open another SSH session to the client, and in it, run
 
 ```
 sudo route add -host $(dig +short nyu.edu) gw 192.168.0.1
+sudo route add -host $(dig +short witest.poly.edu) gw 192.168.0.1
 ```
 
 to have traffic for nyu.edu routed through the router on the experiment interface, 192.168.0.1. (When you run this command, the `$(dig +short witestlab.poly.edu)` variable will be filled in automatically with the actual IP address of the website - the `dig` command is used to resolve the hostname to its IP address.)
