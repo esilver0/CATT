@@ -300,11 +300,31 @@ Verify that this time there is an HTTPS connection even though SSLstrip is enabl
 
 Not all websites support HSTS. It is an opt-in protocol.
 
+On an SSH session on the attacker, run
+```
+killall sslstrip
+```
+to stop the SSL stripping proxy.
+
 In the Firefox window where NoVNC is running, visit
 
 **TODO**
 
-once more.
+for the first time. Verify the website supports HTTPS.
+
+Then, on the attacker node run
+```
+screen sslstrip -l 10000
+```
+to restart the SSL stripping proxy.
+
+In the Firefox window where NoVNC is running, visit
+
+**TODO**
+
+for the second time.
+
+Verify that the connection is via HTTP even thought a connection via HTTPS was already established.
 
 
 **Visting a site on the HSTS preload list**
@@ -317,7 +337,7 @@ http://youtube.com
 
 for the first time. 
 
-Verify that there is an HTTPS connection and that youtube.com is on the [list](https://hg.mozilla.org/releases/mozilla-release/file/tip/security/manager/ssl/nsSTSPreloadList.inc).
+Verify that there is an HTTPS connection and that youtube.com is on the [list](https://hg.mozilla.org/releases/mozilla-release/raw-file/tip/security/manager/ssl/nsSTSPreloadList.inc).
 
 
 
