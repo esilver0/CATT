@@ -8,7 +8,7 @@ To reproduce this experiment on GENI, you will need an account on the [GENI Port
 SSLstrip is an attack on HTTPS that allows an attacker to intercept the plaintext contents of an exchange that would normally be confidential. It involves two steps:
 
 1. The attacker mounts a man-in-the-middle attack so that traffic from the target device will be sent through the attacker.
-2. When the target visits a website, the attacker acts a proxy, serving a HTTP (non-encrypted) version of the site to the target. Meanwhile, the attacker relays all of the target's actions on the site to the real destination over HTTPS.
+2. When the target visits a website, the attacker acts a proxy, serving an HTTP (non-encrypted) version of the site to the target. Meanwhile, the attacker relays all of the target's actions on the site to the real destination over HTTPS.
 
 The target can see that the connection is insecure, but does not know whether the
 connection should be secure. The website that the target visits believes the connection to be secure (since it sees an HTTPS connection to the proxy operated by the attacker).
@@ -73,8 +73,9 @@ After some more lines of output, you should see a URL, e.g.:
 Navigate to this URL:
 
     http://client.sslstrip.ch-geni-net.instageni.maxgigapop.net:6080/vnc.html?host=client.sslstrip.ch-geni-net.instageni.maxgigapop.net&port=6080
-```
-You should not press Ctrl‑C. If you do, rerun the last command. To leave the screen without ending it press Ctrl‑A, then Ctrl‑D.
+``` 
+
+If you press Ctrl‑C, rerun the command. To detach or reattach, see [Notes](#Notes)
 
 Open this URL in a browser. (A recent version of Google Chrome is recommended.) Enter a password when prompted. Then, at the terminal, run
 
@@ -87,6 +88,7 @@ and a browser window should come up.
 This browser is running on the "client" node, _not_ on your own laptop. Leave this open - we will use it throughout our experiment.
 
 > _**Note**: Some InstaGENI racks have a firewall in place that will block incoming traffic on the noVNC port. If everything looks normal in the terminal output but you haven't been able to open the URL in a browser, you might want to try using a different InstaGENI rack._
+
 
 
 ### Redirect traffic for remote site through router
@@ -250,26 +252,16 @@ sslstrip -l 10000
 
 to start the SSL stripping proxy.
 
-In the Firefox window where NoVNC is running, visit
 
-nyu.edu 
+### Circumventing HSTS
 
-again.
-
-If the page loads over HTTPS, you may need to disable HSTS in firefox. See NOTES.
-
-## Notes
-
-### Disabling HSTS
-
-The following won't actually disable HSTS, but this should stop HSTS from protecting against SSLstrip when visiting nyu.edu.
-
-
-In the firefox session go to 
+In the firefox session enter
 
 ```
 about:config
 ```
+
+in the address bar.
 
 Select I accept the risk. Search for `network.stricttransportsecurity.preloadlist`. Double-click on it to toggle it to false.
 
@@ -279,7 +271,7 @@ Then go to
 about:support
 ```
 
-Copy the file location to the right of "Profile Directory" and "Open Directory". Then close all the tabs in Firefox. You could also in another client session run `killall firefox`
+Copy the file location to the right of "Profile Directory" and "Open Directory". Then close all the tabs in Firefox. You could also run in another "client" session `killall firefox`
 
 Run 
 
@@ -300,5 +292,29 @@ in the browser.
 
 >*Note: If you clear the file while firefox is running or before SSLstrip is enabled you might need clear the file for nyu.edu again.*
 
+
+
+
+In the Firefox window where NoVNC is running, visit
+
+nyu.edu 
+
+again.
+
+## Notes
+
+Detaching and attaching to screen
+
+Press Ctrl‑A then Ctrl‑D to detach from a screen without terminating the process.
+To reattach to a screen after detaching, run.
+```
+screen -r
+```
+
+If the SSH connection is lost, run
+
+```
+screen -Dr
+```
 
 ### Exercise
