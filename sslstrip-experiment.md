@@ -281,7 +281,7 @@ http://google.com
 
 for the first time. 
 
-You will notice there is an HTTPS connection even though you have never visited google.com in this browser on the "client" before. There is an HSTS preload list that comes with your browser. Any website on this list will not establish an HTTP (insecure) connection even if you have not visited the site for the first time.
+You will notice there is an HTTPS connection even though you have never visited google.com in this browser on the "client" before. There is an HSTS preload list that comes with your browser. Any website on this list will not establish an HTTP (insecure) connection even if you are visiting the site for the first time.
 
 
 ### Optional
