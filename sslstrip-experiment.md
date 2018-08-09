@@ -17,7 +17,7 @@ connection should be secure. The website that the target visits believes the con
 
 First, reserve your resources. You will need one publicly routable IP - if you are having trouble getting resources, you may use [this monitoring page](https://genimon.uky.edu/status) to find sites with publicly routable IPs available.
 
-In the GENI Portal, create a new slice, then click "Add Resources". Load the RSpec from the URL: **TODO**
+In the GENI Portal, create a new slice, then click "Add Resources". Load the RSpec from the URL: https://raw.githubusercontent.com/esilver0/CATT/master/sslstrip_request_rspec.xml
 
 This should load a topology onto your canvas, with a client, a router, and an attacker. The RSpec also includes commands to install necessary software on the nodes. Click on "Site 1" and choose an InstaGENI site to bind to, then reserve your resources.
 
