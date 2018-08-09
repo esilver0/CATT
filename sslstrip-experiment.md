@@ -259,11 +259,11 @@ In the Firefox window where NoVNC is running, visit
 
 http://nyu.edu.
 
-Notice that the connection is over HTTP. The SSLstrip has worked.
+Notice that the connection is over HTTP. If you go to nyu.edu in another tab on your computer you will see that the website supports HTTPS.
 
 >*Note: If you visit the site before SSLstrip is enabled. See [Circumventing HSTS](#circumventing-hsts)*
 
-**Visting a site you have already established a secure connectioon with**
+**Visting a site that you have already established a secure connection with**
 
 On an SSH session on the attacker, run
 
@@ -293,9 +293,22 @@ http://nyu.edu
 
 once more.
 
-Verify that there is still an HTTPS connection even though SSLstrip is enabled. This is becuase of the HSTS protocal which helps to mitigate SSLstrip by instructing your browser to not downgrade to HTTP once you already have established a secure connection.
+Verify that there is still an HTTPS connection even though SSLstrip is enabled. This is becuase of the [HSTS protocal]() which helps to mitigate SSLstrip by instructing your browser to not downgrade to HTTP once you already have established a secure connection. 
+
+**Visting a site that does not support HSTS**
+
+Not all websites support HSTS. It is an opt-in protocol.
+
+In the Firefox window where NoVNC is running, visit
+
+**TODO**
+
+once more.
+
 
 **Visting a site on the HSTS preload list**
+
+There is an HSTS preload list that comes with your browser. Your browser will not accept an HTTP (insecure) connection from any website on this list even if you are visiting the site for the first time. 
 
 In the Firefox window where NoVNC is running, visit
 
@@ -303,7 +316,7 @@ http://youtube.com
 
 for the first time. 
 
-You will notice there is an HTTPS connection even though you have never visited youtube.com in this browser on the "client" before. There is an HSTS preload list that comes with your browser. Any website on this list will not establish an HTTP (insecure) connection even if you are visiting the site for the first time.
+Verify that there is HTTPS connection.
 
 ## Notes
 
