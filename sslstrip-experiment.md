@@ -381,7 +381,8 @@ Usage: inet_route [-vF] del {-host|-net} Target[/prefix] [gw Gw] [metric M] [[de
 try running 
 <pre>
 dig +short <b>website</b>
-</pre> and see if you get multiple ip addresses. If that is the case, replace $(dig +short **website**) with the ip addresses.
+</pre>
+and see if you get multiple ip addresses. If that is the case, replace $(dig +short **website**) with the ip addresses.
 
 For example
 
