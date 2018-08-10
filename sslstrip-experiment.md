@@ -382,7 +382,7 @@ screen -Dr
 
 ### Delete HSTS history
 
-**WARNING:** Make sure this is in the Firefox window where NoVNC is running and not the address bar for your browser. You want to delete HSTS history on the client, not on your computer.
+**WARNING:** Make sure this is in the Firefox window where NoVNC is running. You want to delete HSTS history on the client, not on your computer.
 
 In the firefox session enter
 
@@ -390,7 +390,7 @@ In the firefox session enter
 about:support
 ```
 
-in the address bar.
+in the address bar on the client.
 
 Copy the file location to the right of "Profile Directory" and "Open Directory". Then close all the tabs in the Firefox window where NoVNC is running. Instead you could run in another "client" session, `killall firefox`.
 
