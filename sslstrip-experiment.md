@@ -312,7 +312,7 @@ to stop the SSL stripping proxy.
 
 In the Firefox window where NoVNC is running, visit
 
-**TODO**
+http://nj.gov
 
 for the first time. Verify the website supports HTTPS.
 
@@ -324,13 +324,13 @@ to restart the SSL stripping proxy.
 
 In the Firefox window where NoVNC is running, visit
 
-**TODO**
+http://nj.gov
 
 for the second time.
 
 Verify that the connection is via HTTP even though a connection via HTTPS was already established.
 
-> _**Note**: In the event that the connection is via HTTPS, it is possible that the website has since started supporting HSTS. You can try visiting different sites to see if they support HTTPs, but not HSTS. See [Expand the experiment](expand-the-experiment) to see how to have traffic for the websites routed through the router on the experiment interface._
+> _**Note**: In the event that the connection is via HTTPS, it is possible that the website has since started supporting HSTS. You can try visiting different sites to see if they support HTTPs, but not HSTS. Here is a [list of websites](https://pulse.cio.gov/https/domains/) that you can use to see whether they support HTTPS, HSTS, etc. See [Expand the experiment](expand-the-experiment) to see how to have traffic for the websites routed through the router on the experiment interface._
 
 
 #### Visiting a site on the HSTS preload list
