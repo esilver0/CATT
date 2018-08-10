@@ -15,6 +15,16 @@ connection should be secure. The website that the target visits believes the con
 
 [HSTS](https://https.cio.gov/hsts/) is a protocol that was established to help mitigate SSLstrip attacks. When a user first establishes an HTTPS connection with a site, the site sends back a message that says "From now on, only connect to this site over HTTPS". That information is saved by the target's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. The target is still vulnerable to SSLstrip when visiting a site for the first time, unless the site is on the HSTS preload list.
 
+## Results
+
+**IN PROGRESS**
+
+Any connection made to a website not on the HSTS preload list is still vulnerable to SSLstrip. 
+
+To prevent against SSLstrip completely, the browser would have to block all non-secure requests (block HTTP). 
+
+
+
 ## Run my experiment
 
 First, reserve your resources. You will need one publicly routable IP&mdash;if you are having trouble getting resources, you may use [this monitoring page](https://genimon.uky.edu/status) to find sites with publicly routable IPs available.
@@ -77,7 +87,7 @@ Navigate to this URL:
     http://client.sslstrip.ch-geni-net.instageni.maxgigapop.net:6080/vnc.html?host=client.sslstrip.ch-geni-net.instageni.maxgigapop.net&port=6080
 ``` 
 
-If you press Ctrl‑C, rerun the command. To detach or reattach from the screen, see [Notes](#notes).
+If you press Ctrl‑C, rerun the command. To detach from or reattach to the screen, see [Notes](#notes).
 
 Open this URL in a browser. (A recent version of Google Chrome is recommended.) Enter a password when prompted. Then, at the terminal, run
 
@@ -105,6 +115,7 @@ Open another SSH session to the client, and in it, run
 sudo route add -host $(dig +short witestlab.poly.edu) gw 192.168.0.1
 sudo route add -host $(dig +short nyu.edu) gw 192.168.0.1
 sudo route add -host $(dig +short youtube.com) gw 192.168.0.1
+sudo route add -host $(dig +short nj.gov) gw 192.168.0.1
 ```
 
 to have traffic for the websites routed through the router on the experiment interface, 192.168.0.1. (When you run this command, the `$(dig +short witestlab.poly.edu)` variable will be filled in automatically with the actual IP address of the website&mdash;the `dig` command is used to resolve the hostname to its IP address.)
@@ -255,7 +266,7 @@ screen sslstrip -l 10000
 
 to start the SSL stripping proxy.
 
-#### Visiting a site for the first time
+#### Visit a site for the first time
 
 In the Firefox window where NoVNC is running, visit
 
@@ -277,7 +288,7 @@ http://nyu.edu.
 
 Check that this time the connection is over HTTPS demonstrating that the SSLstrip attack works.
 
-#### Visiting a site that you have already established a secure connection with
+#### Visit a site that you have already established a secure connection with
 
 On the attacker node, run
 
@@ -298,7 +309,7 @@ Verify that this time there is an HTTPS connection even though SSLstrip is enabl
 
 *Optional: Once a site that supports HSTS has been visited with a secure connection, you can delete the history enabling SSLstrip to take effect. See [Delete HSTS history](#delete-hsts-history)*
 
-#### Visiting a site that does not support HSTS
+#### Visit a site that does not support HSTS
 
 Not all websites support HSTS. It is an opt-in protocol that requires proper configuration. First, the website has to support HTTPS. Second, the website has to include [HSTS response headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security).
 
@@ -356,17 +367,9 @@ sudo route add -host $(dig +short <b>website</b>) gw 192.168.0.1
 replacing the part in bold with the website. Then visit the site in the browser on the client.
 
 
-
-## Results
-
-Any connection made to a website not on the HSTS preload list is still vulnerable to SSLstrip. 
-
-To prevent against SSLstrip completely, the browser would have to block all non-secure requests (block HTTP). 
-
-
 ## Notes
 
-### Detaching and attaching to screen
+### Detaching from and attaching to screen
 
 Press Ctrl‑A then Ctrl‑D to detach from a screen without terminating the process.
 To reattach to a screen after detaching, run.
