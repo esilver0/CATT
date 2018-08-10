@@ -13,6 +13,8 @@ SSLstrip is an attack on HTTPS that allows an attacker to intercept the plaintex
 The target can see that the connection is insecure, but does not know whether the
 connection should be secure. The website that the target visits believes the connection to be secure (since it sees an HTTPS connection to the proxy operated by the attacker).
 
+[HSTS](https://https.cio.gov/hsts/) is a protocol that was established to help mitigate SSLstrip attacks. When a user first establishes an HTTPS connection with a site, the site sends back a message that says "From now on, only connect to this site over HTTPS". That information is saved by the target's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. The target is still vulnerable to SSLstrip when visiting a site for the first time, unless the site is on the HSTS preload list.
+
 ## Run my experiment
 
 First, reserve your resources. You will need one publicly routable IP - if you are having trouble getting resources, you may use [this monitoring page](https://genimon.uky.edu/status) to find sites with publicly routable IPs available.
@@ -75,7 +77,7 @@ Navigate to this URL:
     http://client.sslstrip.ch-geni-net.instageni.maxgigapop.net:6080/vnc.html?host=client.sslstrip.ch-geni-net.instageni.maxgigapop.net&port=6080
 ``` 
 
-If you press Ctrl‑C, rerun the command. To detach or reattach, see [Notes](#notes).
+If you press Ctrl‑C, rerun the command. To detach or reattach from the screen, see [Notes](#notes).
 
 Open this URL in a browser. (A recent version of Google Chrome is recommended.) Enter a password when prompted. Then, at the terminal, run
 
@@ -253,15 +255,13 @@ screen sslstrip -l 10000
 
 to start the SSL stripping proxy.
 
-**Visting a site for the first time**
+#### Visiting a site for the first time
 
 In the Firefox window where NoVNC is running, visit
 
 http://nyu.edu
 
-for the first time. Verify that that the connection is over HTTP. If you go to nyu.edu in another tab on your computer you will see that the website supports HTTPS.
-
-**Visting a site that you have already established a secure connection with**
+for the first time. You should verify that that the page loads over HTTP even though the web server at nyu.edu is configured to use HTTPS for all connections. Therefore, if we stop SSlstrip when we visit nyu.edu, the page should load over HTTPS.
 
 On an SSH session on the attacker, run
 
@@ -277,7 +277,9 @@ http://nyu.edu.
 
 Check that this time the connection is over HTTPS demonstrating that the SSLstrip attack works.
 
-Then, on the attacker node, run
+#### Visting a site that you have already established a secure connection with
+
+On the attacker node, run
 
 ```
 screen sslstrip -l 10000
@@ -291,19 +293,21 @@ http://nyu.edu
 
 once more.
 
-Verify that this time there is an HTTPS connection even though SSLstrip is enabled. This is because of the [HSTS protocal](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) which helps mitigate SSLstrip by instructing the browser to not downgrade to HTTP once a secure connection has been established. 
+Verify that this time there is an HTTPS connection even though SSLstrip is enabled. HSTS prevented the SSLstrip attack by instructing the browser to not downgrade to HTTP since a secure connection had been established. 
 
 
 *Optional: Once a site that supports HSTS has been visited with a secure connection, you can delete the history enabling SSLstrip to take effect. See [Delete HSTS history](#delete-hsts-history)*
 
-**Visting a site that does not support HSTS**
+#### Visting a site that does not support HSTS
 
-Not all websites support HSTS. It is an opt-in protocol.
+Not all websites support HSTS. It is an opt-in protocol that requires proper configuration. First, the website has to support HTTPS. Second, the website has to include [HSTS response headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security).
 
 On an SSH session on the attacker, run
+
 ```
 killall sslstrip
 ```
+
 to stop the SSL stripping proxy.
 
 In the Firefox window where NoVNC is running, visit
@@ -329,9 +333,10 @@ Verify that the connection is via HTTP even though a connection via HTTPS was al
 > _**Note**: In the event that the connection is via HTTPS, it is possible that the website has since started supporting HSTS. Here is a [list]() of known websites that do not support an HTTPS connection. See [Expand the experiment](expand-the-experiment) to see how to have traffic for the websites routed through the router on the experiment interface._
 
 
-**Visting a site on the HSTS preload list**
+#### Visting a site on the HSTS preload list
 
-There is an [HSTS preload list](https://hg.mozilla.org/releases/mozilla-release/file/tip/security/manager/ssl/nsSTSPreloadList.inc) that comes with the browser. Firefox will not accept an HTTP (insecure) request from any website on this list even if you are visiting the site for the first time. 
+
+The browser will not accept an HTTP (insecure) request from any website on the [HSTS preload list](https://hg.mozilla.org/releases/mozilla-release/file/tip/security/manager/ssl/nsSTSPreloadList.inc) even if you are visiting the site for the first time. In order to get on the preload list, a site must support HTTPS for all the content on a page and provide proper HSTS header messages.
 
 In the Firefox window where NoVNC is running, visit
 
@@ -340,8 +345,6 @@ http://youtube.com
 for the first time. 
 
 Verify that there is an HTTPS connection and that youtube.com is on the [list](https://hg.mozilla.org/releases/mozilla-release/raw-file/tip/security/manager/ssl/nsSTSPreloadList.inc).
-
-
 
 
 ### Expand the experiment
