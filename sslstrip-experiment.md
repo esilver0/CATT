@@ -261,7 +261,7 @@ In the Firefox window where NoVNC is running, visit
 
 http://nyu.edu
 
-for the first time. You should verify that that the page loads over HTTP even though the web server at nyu.edu is configured to use HTTPS for all connections. Therefore, if we stop SSlstrip when we visit nyu.edu, the page should load over HTTPS.
+for the first time. You should verify that that the page loads over HTTP. The web server at nyu.edu is configured to use HTTPS for all connections. Therefore, if we stop SSlstrip when we visit nyu.edu, the page should load over HTTPS.
 
 On an SSH session on the attacker, run
 
