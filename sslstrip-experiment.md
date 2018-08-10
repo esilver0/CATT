@@ -256,7 +256,7 @@ On the attacker node, run the following command:
 sudo iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 10000
 ```
 
-This will redirect traffic to port 80 (the default web port for HTTP traffic) to port 1000, which is where the proxy will listen.
+This will redirect traffic from port 80 (the default web port for HTTP traffic) to port 1000, which is where the proxy will listen.
 
 Then, on the attacker, run
 
@@ -272,7 +272,7 @@ In the Firefox window where NoVNC is running, visit
 
 http://nyu.edu
 
-for the first time. You should verify that that the page loads over HTTP. The web server at nyu.edu is configured to use HTTPS for all connections. Therefore, if we stop SSlstrip when we visit nyu.edu, the page should load over HTTPS.
+for the first time. You should verify that that the page loads over HTTP. The web server at nyu.edu is configured to use HTTPS for all connections. Therefore, if we stop SSlstrip before we visit nyu.edu, the page should load over HTTPS.
 
 On an SSH session on the attacker, run
 
@@ -366,10 +366,40 @@ sudo route add -host $(dig +short <b>website</b>) gw 192.168.0.1
 </pre>
 replacing the part in bold with the website. Then visit the site in the browser on the client.
 
+If the result is similiar to
+
+```
+ers595@client:~$ sudo route add -host $(dig +short aol.com) gw 192.168.0.1
+Usage: inet_route [-vF] del {-host|-net} Target[/prefix] [gw Gw] [metric M] [[dev] If]
+       inet_route [-vF] add {-host|-net} Target[/prefix] [gw Gw] [metric M]
+                              [netmask N] [mss Mss] [window W] [irtt I]
+                              [mod] [dyn] [reinstate] [[dev] If]
+       inet_route [-vF] add {-host|-net} Target[/prefix] [metric M] reject
+       inet_route [-FC] flush      NOT supported
+```
+
+try running 
+<pre>
+dig +short <b>website</b>
+</pre> and see if you get multiple ip addresses. If that is the case, replace $(dig +short aol.com) with the ip addresses. In the case of aol.com
+
+```
+ers595@client:~$ dig +short aol.com
+67.195.231.10
+106.10.218.150
+124.108.115.87
+188.125.72.165
+66.218.87.12
+ers595@client:~$ sudo route add -host 67.195.231.10 gw 192.168.0.1
+ers595@client:~$ sudo route add -host 106.10.218.150 gw 192.168.0.1
+ers595@client:~$ sudo route add -host 124.108.115.87 gw 192.168.0.1
+ers595@client:~$ sudo route add -host 188.125.72.165 gw 192.168.0.1
+ers595@client:~$ sudo route add -host 66.218.87.12 gw 192.168.0.1
+```
 
 ## Notes
 
-### Detaching from and attaching to screen
+### Detaching from and attaching to a screen
 
 Press Ctrl‑A then Ctrl‑D to detach from a screen without terminating the process.
 To reattach to a screen after detaching, run.
