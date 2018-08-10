@@ -17,7 +17,7 @@ connection should be secure. The website that the target visits believes the con
 
 ## Run my experiment
 
-First, reserve your resources. You will need one publicly routable IP — if you are having trouble getting resources, you may use [this monitoring page](https://genimon.uky.edu/status) to find sites with publicly routable IPs available.
+First, reserve your resources. You will need one publicly routable IP&mdash;if you are having trouble getting resources, you may use [this monitoring page](https://genimon.uky.edu/status) to find sites with publicly routable IPs available.
 
 In the GENI Portal, create a new slice, then click "Add Resources". Load the RSpec from the URL: https://raw.githubusercontent.com/esilver0/CATT/master/sslstrip_request_rspec.xml
 
@@ -87,7 +87,7 @@ firefox
 
 and a browser window should come up.
 
-This browser is running on the "client" node, _not_ on your own laptop. Leave this open — we will use it throughout our experiment.
+This browser is running on the "client" node, _not_ on your own laptop. Leave this open&mdash;we will use it throughout our experiment.
 
 > _**Note**: Some InstaGENI racks have a firewall in place that will block incoming traffic on the noVNC port. If everything looks normal in the terminal output but you haven't been able to open the URL in a browser, you might want to try using a different InstaGENI rack._
 
@@ -107,7 +107,7 @@ sudo route add -host $(dig +short nyu.edu) gw 192.168.0.1
 sudo route add -host $(dig +short youtube.com) gw 192.168.0.1
 ```
 
-to have traffic for the websites routed through the router on the experiment interface, 192.168.0.1. (When you run this command, the `$(dig +short witestlab.poly.edu)` variable will be filled in automatically with the actual IP address of the website — the `dig` command is used to resolve the hostname to its IP address.)
+to have traffic for the websites routed through the router on the experiment interface, 192.168.0.1. (When you run this command, the `$(dig +short witestlab.poly.edu)` variable will be filled in automatically with the actual IP address of the website&mdash;the `dig` command is used to resolve the hostname to its IP address.)
 
 Then run 
 
@@ -159,7 +159,7 @@ and in the Firefox instance running in NoVNC, visit
 
 http://witestlab.poly.edu
 
-Make sure that the page loads, and make sure you can see exchange in your `tcpdump` window — this is how you know that traffic for this host is going through the router via the experiment network, and not through the control interface on the client. Once you have verified this, you can stop the `tcpdump` on the router.
+Make sure that the page loads, and make sure you can see exchange in your `tcpdump` window&mdash;this is how you know that traffic for this host is going through the router via the experiment network, and not through the control interface on the client. Once you have verified this, you can stop the `tcpdump` on the router.
 
 You should also verify that the page is loaded over HTTPS — the browser will show a green padlock icon in the address bar to indicate that the connection is secure:
 
@@ -336,7 +336,7 @@ Verify that the connection is via HTTP even though a connection via HTTPS was al
 #### Visiting a site on the HSTS preload list
 
 
-The browser will not accept an HTTP (insecure) request from any website on the [HSTS preload list](https://hg.mozilla.org/releases/mozilla-release/file/tip/security/manager/ssl/nsSTSPreloadList.inc) even if you are visiting the site for the first time. In order to get on the preload list, a site must support HTTPS for all the content on a page and provide proper HSTS header messages.
+The browser will not accept an HTTP (insecure) request from any website on the [HSTS preload list](https://hg.mozilla.org/releases/mozilla-release/file/tip/security/manager/ssl/nsSTSPreloadList.inc) even if you are visiting the site for the first time. A site on the preload list must support HTTPS throughout its site and provide proper HSTS header messages.
 
 In the Firefox window where NoVNC is running, visit
 
