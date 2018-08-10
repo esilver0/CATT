@@ -291,7 +291,7 @@ http://nyu.edu
 
 once more.
 
-Verify that this time there is an HTTPS connection even though SSLstrip is enabled. This is becuase of the [HSTS protocal](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) which helps mitigate SSLstrip by instructing the browser to not downgrade to HTTP once a secure connection has been established. 
+Verify that this time there is an HTTPS connection even though SSLstrip is enabled. This is because of the [HSTS protocal](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) which helps mitigate SSLstrip by instructing the browser to not downgrade to HTTP once a secure connection has been established. 
 
 
 *Optional: Once a site that supports HSTS has been visited with a secure connection, you can delete the history enabling SSLstrip to take effect. See [Delete HSTS history](#delete-hsts-history)*
