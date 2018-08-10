@@ -413,6 +413,6 @@ firefox
 
 in the browser.
 
-As far as HSTS is concerned, it is as if an HTTPS connection with the websites were never established in the first place. Keep in mind HSTS is still active&mdash;reconnecting with any of the websites via HTTPS will reestablish HSTS protection for those sites.
+As far as HSTS is concerned, it is as if an HTTPS connection with the websites were never established in the first place. Keep in mind HSTS is still active&mdash;reconnecting with any of the websites via HTTPS will re-establish HSTS protection for those sites.
 
 ### Exercise
