@@ -22,10 +22,7 @@ The target can see that the connection is insecure, but does not know whether th
 
 In this experiment, an attacker is able to use SSLstrip to switch the normally encrypted-HTTPS traffic to unencrypted-HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
 
-Normally when we visit a site that supports HTTPS, we will be directed to the HTTPS version of the site.
-When there is an SSLstrip attack and we visit such a site, we will receive an HTTP version of the site. 
-
-The following is an example of when there is an SSLstrip attack and we visit http://nj.gov.
+Normally when we visit a site that supports HTTPS, we will be directed to the HTTPS version of the site. When there is an SSLstrip attack and we visit such a site, we will receive an HTTP version of the site. The following is an example of when there is an SSLstrip attack and we visit http://nj.gov.
 
 **I have a recording**
 
@@ -37,6 +34,21 @@ The following is an example of when the SSLstrip attack is disabled, but the att
 **I have a recording**
 
 We are able to verify that we are served the HTTPS version of the site. In the terminal, the captured HTTP content is displayed. This time, there is much less to display since the contents of the webpage are encrypted.
+
+Websites that support HSTS are susceptible to SSLstrip when a connection is made for the first time. In the following example, we connect to http://nyu.edu which supports the HSTS protocol. There is an SSLstrip attack and this is the first connection.
+
+
+![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/nyu_first_time.png)
+
+In the following example, we connect to http://nyu.edu again. This time we have already established a secure connection and there is an SSLstrip attack. Notice that in this case, even with an SSLstrip attack, we will connect to the HTTPS version of the site
+
+![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/nyu_not_first_time.png)
+
+Visiting a site on the HSTS preload list will always establish a secure connection. youtube.com is on the HTST preload list. In the following example, we connect to http://youtube.com for the first time during an SSLstrip attack.
+
+![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/youtube.png)
+
+
 
 ## Run my experiment
 
