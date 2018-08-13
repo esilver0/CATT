@@ -35,14 +35,14 @@ The following is an example of when the SSLstrip attack is disabled, but the att
 
 We are able to verify that we are served the HTTPS version of the site. In the terminal, the captured HTTP content is displayed. This time, there is much less to display since the contents of the webpage are encrypted.
 
-Websites that support HSTS are susceptible to SSLstrip when a connection is made for the first time. In the following example, we connect to http://nyu.edu which supports the HSTS protocol. There is an SSLstrip attack and this is the first connection.
+Websites that support HSTS are susceptible to SSLstrip when a connection is made for the first time. In the following example, we connect to http://acl.gov which supports the HSTS protocol. There is an SSLstrip attack and this is the first connection.
 
 
-![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/nyu_first_time.png)
+![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_first_time.png)
 
-In the following example, we connect to http://nyu.edu again. This time we have already established a secure connection and there is an SSLstrip attack. Notice that in this case, even with an SSLstrip attack, we will connect to the HTTPS version of the site
+In the following example, we connect to http://acl.edu again. This time we have already established a secure connection and there is an SSLstrip attack. Notice that in this case, even with an SSLstrip attack, we will connect to the HTTPS version of the site
 
-![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/nyu_not_first_time.png)
+![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_not_first_time.png)
 
 Visiting a site on the HSTS preload list will always establish a secure connection. youtube.com is on the HTST preload list. In the following example, we connect to http://youtube.com for the first time during an SSLstrip attack.
 
@@ -138,7 +138,7 @@ Open another SSH session to the client, and in it, run
 
 ```
 sudo route add -host $(dig +short witestlab.poly.edu) gw 192.168.0.1
-sudo route add -host $(dig +short nyu.edu) gw 192.168.0.1
+sudo route add -host $(dig +short acl.gov) gw 192.168.0.1
 sudo route add -host $(dig +short youtube.com) gw 192.168.0.1
 sudo route add -host $(dig +short nj.gov) gw 192.168.0.1
 ```
@@ -158,7 +158,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 128.238.66.220  192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
 172.217.4.110   192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
 199.20.100.8    192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
-216.165.47.10   192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
+158.74.51.2     192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
 </pre>
 
 For return traffic to the client from the websites to reach the router, we'll also need to set up NAT on the router. Open an SSH session to the router node, and run
@@ -304,12 +304,12 @@ to display only HTTP packets. This will display the unencrypted communication be
 
 In the Firefox window where NoVNC is running, visit
 
-http://nyu.edu
+http://acl.gov
 
 for the first time. You should verify that that the page loads over HTTP. 
 
 
-The web server at nyu.edu is configured to use HTTPS for all connections. Therefore, if we stop SSlstrip before we visit nyu.edu, the page should load over HTTPS.
+The web server at acl.gov is configured to use HTTPS for all connections. Therefore, if we stop SSlstrip before we visit acl.gov, the page should load over HTTPS.
 
 On an SSH session on the attacker, run
 
@@ -328,7 +328,7 @@ on the attacker.
 
 In the Firefox window where NoVNC is running, visit
 
-http://nyu.edu.
+http://acl.gov.
 
 Check that this time the connection is over HTTPS demonstrating that the SSLstrip attack works.
 
@@ -345,7 +345,7 @@ to again redirect traffic from port 80 to port 1000 and restart the SSL strippin
 
 Wait a minute for SSLstrip to reconfigure. In the Firefox window where NoVNC is running, visit
 
-http://nyu.edu
+http://acl.gov
 
 once more.
 
