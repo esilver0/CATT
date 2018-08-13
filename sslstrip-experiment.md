@@ -13,7 +13,7 @@ SSLstrip is an attack on HTTPS that allows an attacker to intercept the plaintex
 The target can see that the connection is insecure, but does not know whether the
 connection should be secure. The website that the target visits believes the connection to be secure (since it sees an HTTPS connection to the proxy operated by the attacker).
 
-[HSTS](https://https.cio.gov/hsts/) is a protocol that was established to help mitigate SSLstrip attacks. When a user first establishes an HTTPS connection with a site, the site sends back a message that says "From now on, only connect to this site over HTTPS". That information is saved by the target's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. The target is still vulnerable to SSLstrip when visiting a site for the first time, unless the site is on the HSTS preload list.
+[HSTS](https://https.cio.gov/hsts/) is a protocol that was established to help mitigate SSLstrip attacks. When a user first establishes an HTTPS connection to a site, the site sends back a message that says "From now on, only connect to this site over HTTPS". That information is saved by the target's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. The target is still vulnerable to SSLstrip when visiting a site for the first time, unless the site is on the HSTS preload list.
 
 ## Results
 
@@ -21,7 +21,7 @@ connection should be secure. The website that the target visits believes the con
 
 Any connection made to a website not on the HSTS preload list is still vulnerable to SSLstrip. 
 
-To prevent against SSLstrip completely, the browser would have to block all non-secure requests (block HTTP). 
+To protect against SSLstrip completely, the browser would have to block all HTTP requests. 
 
 
 
@@ -33,7 +33,7 @@ In the GENI Portal, create a new slice, then click "Add Resources". Load the RSp
 
 This should load a topology onto your canvas, with a client, a router, and an attacker. The RSpec also includes commands to install necessary software on the nodes. Click on "Site 1" and choose an InstaGENI site to bind to, then reserve your resources.
 
-Wait for your nodes to boot up (they will turn green in the canvas display on your slice page in the GENI portal when they are ready). Then, wait another couple of minutes for the software installation to finish. Finally, use SSH to log in to each node in your topology (using the login details given in the GENI Portal).
+Wait for your nodes to boot up (they will turn green on the canvas display on your slice page in the GENI portal when they are ready). Then, wait another couple of minutes for the software installation to finish. Finally, use SSH to log in to each node in your topology (using the login details given in the GENI Portal).
 
 ### Open a browser on the client
 
@@ -126,7 +126,7 @@ Then run
 route -n
 ```
 
-and verify that these host-specific entries appears in the routing table. For example:
+and verify that these host-specific entries appear in the routing table. For example:
 
 <pre>
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
@@ -134,7 +134,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 216.165.47.10   192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
 </pre>
 
-For return traffic from the websites to the client to reach the router, we'll also need to set up NAT on the router. Open an SSH session to the router node, and run
+For return traffic to the client from the websites to reach the router, we'll also need to set up NAT on the router. Open an SSH session to the router node, and run
 
 <pre>
 sudo iptables -A FORWARD -o eth0 -i eth1 -s 192.168.0.0/24 -m conntrack --ctstate NEW -j ACCEPT  
@@ -341,7 +341,7 @@ for the second time.
 
 Verify that the connection is via HTTP even though a connection via HTTPS was already established.
 
-> _**Note**: In the event that the connection is via HTTPS, it is possible that the website has since started supporting HSTS. You can try visiting different sites to see if they support HTTPs, but not HSTS. Here is a [list of websites](https://pulse.cio.gov/https/domains/) that you can use to see whether they support HTTPS, HSTS, etc. See [Expand the experiment](expand-the-experiment) to see how to have traffic for the websites routed through the router on the experiment interface._
+> _**Note**: In the event that the connection is via HTTPS, it is possible that the website has since started supporting HSTS. Here is a [list of websites](https://pulse.cio.gov/https/domains/) with indication as to whether or not they support HTTPS, HSTS, etc. See [Expand the experiment](expand-the-experiment) to learn how to have traffic for the websites routed through the router on the experiment interface._
 
 
 #### Visiting a site on the HSTS preload list
@@ -428,14 +428,14 @@ about:support
 
 in the address bar on the client.
 
-Copy the file location to the right of "Profile Directory" and "Open Directory". Then close all the tabs in the Firefox window where NoVNC is running. Instead you could run in another "client" session, `killall firefox`.
+Copy the file location to the right of "Profile Directory" and "Open Directory". Then close all the tabs in the Firefox window where NoVNC is running. Or you could run in another "client" session, `killall firefox`.
 
-Run 
+Then run 
 
 <pre>
 nano <b>/users/ers595/.mozilla/firefox/70y24mrv.default</b>/SiteSecurityServiceState.txt
 </pre>
-Replace the part in bold with the file location.
+replacing the part in bold with the file location.
 
 *See WARNING above before proceeding* \
 Clear any line containing the websites you want to remove.
