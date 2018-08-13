@@ -1,3 +1,7 @@
+In this experiment, we will set up an SSL stripping attack on GENI and will demonstrate what the attack does to the encrypted communication between a client and a site. We will examine what information an “attacker” can see due to the attack and under what conditions the attack works.
+
+It should take about **TODO** to run this experiment.
+
 To reproduce this experiment on GENI, you will need an account on the [GENI Portal](http://groups.geni.net/geni/wiki/SignMeUp), and you will need to have [joined a project](http://groups.geni.net/geni/wiki/JoinAProject). You should have already [uploaded your SSH keys to the portal and know how to log in to a node with those keys](http://groups.geni.net/geni/wiki/HowTo/LoginToNodes). If you're not sure if you have those skills, you may want to try [Lab Zero](http://tinyurl.com/geni-labzero) first.
 
 * Skip to [Results](#results)
@@ -13,11 +17,37 @@ SSLstrip is an attack on HTTPS that allows an attacker to intercept the plaintex
 The target can see that the connection is insecure, but does not know whether the
 connection should be secure. The website that the target visits believes the connection to be secure (since it sees an HTTPS connection to the proxy operated by the attacker).
 
-[HSTS](https://https.cio.gov/hsts/) is a protocol that was established to help mitigate SSLstrip attacks. When a user first establishes an HTTPS connection to a site, the site sends back a message that says "From now on, only connect to this site over HTTPS". That information is saved by the target's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. The target is still vulnerable to SSLstrip when visiting a site for the first time, unless the site is on the HSTS preload list.
+[HSTS](https://https.cio.gov/hsts/) is a protocol that helps mitigate SSLstrip attacks. When a user first establishes an HTTPS connection to a site, the site sends back a message that says "From now on, only connect to this site over HTTPS". That information is saved by the target's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. The target is still vulnerable to SSLstrip when visiting a site for the first time, unless the site is on the HSTS preload list.
 
 ## Results
 
 **IN PROGRESS**
+
+In this experiment, an attacker is able to use SSLstrip to switch the normally encrypted-HTTPS traffic to unencrypted-HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
+
+When the SSLstrip attack is active and we visit nj.gov.
+
+```
+ers595@attacker:~$ sudo tcpdump -s 0 -i eth1 -A tcp port http
+
+
+
+```
+
+
+When there is no attack and we visit nj.gov
+
+```
+ers595@attacker:~$ sudo tcpdump -s 0 -i eth1 -A tcp port http
+
+```
+
+
+During a normal exchange over HTTPS:
+
+
+
+When SSL stripping is not taking place, we 
 
 Any connection made to a website not on the HSTS preload list is still vulnerable to SSLstrip. 
 
@@ -268,19 +298,36 @@ to start the SSL stripping proxy.
 
 #### Visit a site for the first time
 
+On the attacker node, run
+```
+sudo tcpdump -s 0 -i eth1 -A tcp port http
+```
+to display only HTTP packets. This will display the unencrypted communication between the client and the site that the attacker can see.
+
+
 In the Firefox window where NoVNC is running, visit
 
 http://nyu.edu
 
-for the first time. You should verify that that the page loads over HTTP. The web server at nyu.edu is configured to use HTTPS for all connections. Therefore, if we stop SSlstrip before we visit nyu.edu, the page should load over HTTPS.
+for the first time. You should verify that that the page loads over HTTP. 
+
+
+The web server at nyu.edu is configured to use HTTPS for all connections. Therefore, if we stop SSlstrip before we visit nyu.edu, the page should load over HTTPS.
 
 On an SSH session on the attacker, run
 
 ```
 killall sslstrip
+sudo iptables -t nat -D PREROUTING 1
 ```
 
-to stop the SSL stripping proxy.
+to stop the SSL stripping proxy and stop redirecting traffic from port 80.
+
+Run
+```
+sudo tcpdump -s 0 -i eth1 -A tcp port http
+```
+on the attacker. 
 
 In the Firefox window where NoVNC is running, visit
 
@@ -293,10 +340,11 @@ Check that this time the connection is over HTTPS demonstrating that the SSLstri
 On the attacker node, run
 
 ```
+sudo iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 10000
 screen sslstrip -l 10000
 ```
 
-to restart the SSL stripping proxy.
+to again redirect traffic from port 80 to port 1000 and restart the SSL stripping proxy .
 
 In the Firefox window where NoVNC is running, visit
 
@@ -317,9 +365,10 @@ On an SSH session on the attacker, run
 
 ```
 killall sslstrip
+sudo iptables -t nat -D PREROUTING 1
 ```
 
-to stop the SSL stripping proxy.
+to disable the SSL stripping attack.
 
 In the Firefox window where NoVNC is running, visit
 
@@ -328,10 +377,21 @@ http://nj.gov
 for the first time. Verify the website supports HTTPS.
 
 Then, on the attacker node run
+
 ```
+sudo iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 10000
 screen sslstrip -l 10000
 ```
-to restart the SSL stripping proxy.
+to enable the SSL stripping attack.
+
+
+Run
+
+```
+sudo tcpdump -s 0 -i eth1 -A tcp port http
+```
+
+on the attacker to display the HTTP packets. 
 
 In the Firefox window where NoVNC is running, visit
 
