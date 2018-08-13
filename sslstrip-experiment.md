@@ -32,9 +32,6 @@ The following is an example of when there is an SSLstrip attack and we visit htt
 
 We are able to see that we are served an HTTP version of the site. Check the upper-left corner in the address bar and you should not see an HTTPS indicator. The terminal is run on the attacker node and displays the captured HTTP content between the client and the site. There is a lot of content including the HTML of the webpage.
 
-**I have a recording**
-
-
 The following is an example of when the SSLstrip attack is disabled, but the attacker is still executing an MITM attack and we visit nj.gov.
 
 **I have a recording**
