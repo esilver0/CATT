@@ -11,49 +11,30 @@ To reproduce this experiment on GENI, you will need an account on the [GENI Port
  
 SSLstrip is an attack on HTTPS that allows an attacker to intercept the plaintext contents of an exchange that would normally be confidential. It involves two steps:
 
-1. The attacker mounts a man-in-the-middle attack so that traffic from the target device will be sent through the attacker.
+1. The attacker mounts an MITM (man-in-the-middle) attack so that traffic from the target device will be sent through the attacker.
 2. When the target visits a website, the attacker acts a proxy, serving an HTTP (non-encrypted) version of the site to the target. Meanwhile, the attacker relays all of the target's actions on the site to the real destination over HTTPS.
 
-The target can see that the connection is insecure, but does not know whether the
-connection should be secure. The website that the target visits believes the connection to be secure (since it sees an HTTPS connection to the proxy operated by the attacker).
+The target can see that the connection is insecure, but does not know whether the connection should be secure. The website that the target visits believes the connection to be secure (since it sees an HTTPS connection to the proxy operated by the attacker).
 
-[HSTS](https://https.cio.gov/hsts/) is a protocol that helps mitigate SSLstrip attacks. When a user first establishes an HTTPS connection to a site, the site sends back a message that says "From now on, only connect to this site over HTTPS". That information is saved by the target's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. The target is still vulnerable to SSLstrip when visiting a site for the first time, unless the site is on the HSTS preload list.
+[HSTS](https://https.cio.gov/hsts/) is a protocol that helps mitigate SSLstrip attacks. When a user first establishes an HTTPS connection to a site, the site sends back a header message that says "From now on, only connect to this site over HTTPS". That information is saved by the target's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. The target is still vulnerable to SSLstrip when visiting a site for the first time, unless the site is on the HSTS preload list.
 
 ## Results
 
-**IN PROGRESS**
-
 In this experiment, an attacker is able to use SSLstrip to switch the normally encrypted-HTTPS traffic to unencrypted-HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
 
-When the SSLstrip attack is active and we visit nj.gov.
+When there is an SSLstrip attack and we visit http://nj.gov, we are able to verify that we are served an HTTP version of the site. Check the upper-left corner in the address bar and you should not see an HTTPS indicator. In the terminal, the captured HTTP content the attacker is able to see is displayed. There is a lot of content including the HTML of the webpage.
 
-```
-ers595@attacker:~$ sudo tcpdump -s 0 -i eth1 -A tcp port http
-
+**I have a recording**
 
 
-```
+When the SSLstrip attack is disabled, but the attacker is still executing an MITM attack and we visit nj.gov, we are able to verify that we are served the HTTPS version of the site. In the terminal, the captured HTTP content is displayed. This time, there is much less to display since the contents of the webpage are encrypted.
 
+**I have a recording**
 
-When there is no attack and we visit nj.gov
-
-```
-ers595@attacker:~$ sudo tcpdump -s 0 -i eth1 -A tcp port http
-
-```
-
-
-During a normal exchange over HTTPS:
-
-
-
-When SSL stripping is not taking place, we 
 
 Any connection made to a website not on the HSTS preload list is still vulnerable to SSLstrip. 
 
 To protect against SSLstrip completely, the browser would have to block all HTTP requests. 
-
-
 
 ## Run my experiment
 
@@ -161,6 +142,8 @@ and verify that these host-specific entries appear in the routing table. For exa
 <pre>
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 128.238.66.220  192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
+172.217.4.110   192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
+199.20.100.8    192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
 216.165.47.10   192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
 </pre>
 
@@ -321,7 +304,7 @@ killall sslstrip
 sudo iptables -t nat -D PREROUTING 1
 ```
 
-to stop the SSL stripping proxy and stop redirecting traffic from port 80.
+to stop the SSL stripping proxy and stop redirecting traffic from port 80. 
 
 Run
 ```
@@ -344,9 +327,9 @@ sudo iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to
 screen sslstrip -l 10000
 ```
 
-to again redirect traffic from port 80 to port 1000 and restart the SSL stripping proxy .
+to again redirect traffic from port 80 to port 1000 and restart the SSL stripping proxy. 
 
-In the Firefox window where NoVNC is running, visit
+Wait a minute for SSLstrip to reconfigure. In the Firefox window where NoVNC is running, visit
 
 http://nyu.edu
 
@@ -385,7 +368,7 @@ screen sslstrip -l 10000
 to enable the SSL stripping attack.
 
 
-Run
+wait a minute, then run
 
 ```
 sudo tcpdump -s 0 -i eth1 -A tcp port http
@@ -416,7 +399,6 @@ http://youtube.com
 for the first time. 
 
 Verify that there is an HTTPS connection and that youtube.com is on the [list](https://hg.mozilla.org/releases/mozilla-release/raw-file/tip/security/manager/ssl/nsSTSPreloadList.inc).
-
 
 ### Expand the experiment
 To attempt this with other websites, run on the client
