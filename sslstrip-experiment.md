@@ -306,7 +306,7 @@ In the Firefox window where NoVNC is running, visit
 
 http://acl.gov
 
-for the first time. You should verify that that the page loads over HTTP. 
+for the first time. You should verify that the page loads over HTTP. 
 
 
 The web server at acl.gov is configured to use HTTPS for all connections. Therefore, if we stop SSlstrip before we visit acl.gov, the page should load over HTTPS.
