@@ -144,20 +144,39 @@ to find out the IP address that you are connecting from (as visible to the host 
 
 You should see something like
 
-```
+<pre>
 ers595@client:~$ netstat -n  | grep 608
-tcp        0  20994 128.104.159.128:6080    216.165.95.174:17852    ESTABLISHED
+tcp        0  20994 128.104.159.128:6080    <b>216.165.95.174</b>:17852    ESTABLISHED
+</pre>
+
+The part in bold is your IP address.
+
+Run
+
+```
+route -n
 ```
 
-In this example, the connecting IP address is 216.165.95.174. If you are connecting from 216.165.95.174, you would add a routing rule on the host for 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection).
+You should see something like
+<pre>
+ers595@client:~$ route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         <b>128.104.159.1</b>   0.0.0.0         UG    0      0        0 eth0
+128.104.159.0   0.0.0.0         255.255.255.0   U     0      0        0 eth0
+192.168.0.0     0.0.0.0         255.255.255.0   U     0      0        0 eth1
+</pre>
+The part in bold is the default gateway.
+
+If you are connecting from 216.165.95.174, you would add a routing rule on the host for 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection).
 
 Add the routing rule
 
 <pre>
-sudo route add -net <b>216.165.95.0/24</b> gw GATEWAY
+sudo route add -net <b>NETWORK</b> gw <b>GATEWAY</b>
 </pre>
 
-replacing the part in bold with the network range. This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules.
+replacing NETWORK with the network range and GATEWAY with the default gateway. This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules.
 
 Now that you have done that, you can delete the current default gateway rule
 
