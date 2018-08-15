@@ -144,7 +144,7 @@ subsituting the part is bold with the port SSH is running on. Use this to find o
 
 Then, add a routing rule for that network
 
-For example, if you are connected from 216.165.95.151 or 216.165.95.147, you would add a routing rule on the host for 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection).
+For example, if you are connected from 216.165.95.151, you would add a routing rule on the host for 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection).
 
 Run
 <pre>
