@@ -200,7 +200,8 @@ and verify that these host-specific entries appear in the routing table. For exa
 
 ```
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
-128.238.66.220  192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
+192.168.0.2     192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
+216.165.95.0    128.104.159.1   255.255.255.0   UG    0      0        0 eth0
 ```
 
 For return traffic to the client from the websites to reach the router, we'll also need to set up NAT on the router. Open an SSH session to the router node, and run
