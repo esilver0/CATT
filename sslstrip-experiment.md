@@ -186,7 +186,9 @@ sudo route del default
 
 and add one for the router.
 
-```sudo route add 192.168.0.2 gw 192.168.0.1```
+```
+sudo route add default gw 192.168.0.1
+```
 
 then all traffic from the client EXCEPT traffic to/from your own network, will be forwarded to the router.
 
