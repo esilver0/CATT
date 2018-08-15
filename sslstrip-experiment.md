@@ -157,7 +157,7 @@ Add the routing rule
 sudo route add -net <b>216.165.95.0/24</b> gw 192.168.0.2
 </pre>
 
-for this network. This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules.
+replacing the part in bold with the network range. This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules.
 
 Now that you have done that, you can delete the current default gateway rule
 
