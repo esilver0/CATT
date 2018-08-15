@@ -136,30 +136,31 @@ By default, if you visit https://witestlab.poly.edu in the Firefox browser that'
 
 Open another SSH session to the client, and in it, run
 
-```
-sudo route add -host $(dig +short witestlab.poly.edu) gw 192.168.0.1
-sudo route add -host $(dig +short acl.gov) gw 192.168.0.1
-sudo route add -host $(dig +short youtube.com) gw 192.168.0.1
-sudo route add -host $(dig +short nj.gov) gw 192.168.0.1
-```
-
-to have traffic for the websites routed through the router on the experiment interface, 192.168.0.1. (When you run this command, the `$(dig +short witestlab.poly.edu)` variable will be filled in automatically with the actual IP address of the website&mdash;the `dig` command is used to resolve the hostname to its IP address.)
-
-Then run 
-
-```
-route -n
-```
-
-and verify that these host-specific entries appear in the routing table. For example:
-
 <pre>
-Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
-128.238.66.220  192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
-172.217.4.110   192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
-199.20.100.8    192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
-158.74.51.2     192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
+netstat -n  | grep <b>PORT</b>
 </pre>
+
+subsituting the part is bold with the port SSH is running on. Use this to find out the IP address that you are connecting from (as visible to the host that you are logged in to).
+
+Then, add a routing rule for that network
+
+For example, if you are connected from 216.165.95.151 or 216.165.95.147, you would add a routing rule on the host for 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection).
+
+Run
+<pre>
+sudo route add -net <b>216.165.95.0/24</b> gw GATEWAY
+</pre>
+
+substituting the current default gateway.
+
+This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules.
+Now that you have done that, you can delete the current default gateway rule and add one for the router.
+
+Run
+
+```sudo route add default gw 192.168.0.1```
+
+then all traffic from the client EXCEPT traffic to/from your own network, will be forwarded to the router.
 
 For return traffic to the client from the websites to reach the router, we'll also need to set up NAT on the router. Open an SSH session to the router node, and run
 
@@ -349,8 +350,11 @@ http://acl.gov
 
 once more.
 
-Verify that this time there is an HTTPS connection even though SSLstrip is enabled. HSTS prevented the SSLstrip attack by instructing the browser to not downgrade to HTTP since a secure connection had been established. 
+Verify that this time there is an HTTPS connection even though SSLstrip is enabled. HSTS prevented the SSLstrip attack by instructing the browser to not downgrade to HTTP since a secure connection had been established.
 
+In the Firefox window where NoVNC is running, press Ctrl‑Shift‑k. Refresh the page, then click on network. Click on any of the files from acl.gov. In the headers section, look for "Strict-Transfer-Security". This is the HSTS header.
+
+![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/Strict-Transport-Security-Header_small.png)
 
 *Optional: Once a site that supports HSTS has been visited with a secure connection, you can delete the history enabling SSLstrip to take effect. See [Delete HSTS history](#delete-hsts-history)*
 
@@ -381,8 +385,7 @@ screen sslstrip -l 10000
 ```
 to enable the SSL stripping attack.
 
-
-wait a minute, then run
+Wait a minute, then run
 
 ```
 sudo tcpdump -s 0 -i eth1 -A tcp port http
@@ -398,11 +401,9 @@ for the second time.
 
 Verify that the connection is via HTTP even though a connection via HTTPS was already established.
 
-> _**Note**: In the event that the connection is via HTTPS, it is possible that the website has since started supporting HSTS. Here is a [list of websites](https://pulse.cio.gov/https/domains/) with indication as to whether or not they support HTTPS, HSTS, etc. See [Expand the experiment](expand-the-experiment) to learn how to have traffic for the websites routed through the router on the experiment interface._
-
+> _**Note**: In the event that the connection is via HTTPS, it is possible that the website has since started supporting HSTS. Here is a [list of websites](https://pulse.cio.gov/https/domains/) with indication as to whether or not they support HTTPS, HSTS, etc._
 
 #### Visiting a site on the HSTS preload list
-
 
 The browser will not accept an HTTP (insecure) request from any website on the [HSTS preload list](https://hg.mozilla.org/releases/mozilla-release/file/tip/security/manager/ssl/nsSTSPreloadList.inc) even if you are visiting the site for the first time. A site on the preload list must support HTTPS throughout its site and provide proper HSTS header messages.
 
@@ -413,49 +414,6 @@ http://youtube.com
 for the first time. 
 
 Verify that there is an HTTPS connection and that youtube.com is on the [list](https://hg.mozilla.org/releases/mozilla-release/raw-file/tip/security/manager/ssl/nsSTSPreloadList.inc).
-
-### Expand the experiment
-To attempt this with other websites, run on the client
-
-<pre>
-sudo route add -host $(dig +short <b>website</b>) gw 192.168.0.1
-</pre>
-replacing the part in bold with the website. Then visit the site in the browser on the client.
-
-If the result is similiar to
-
-```
-ers595@client:~$ sudo route add -host $(dig +short aol.com) gw 192.168.0.1
-Usage: inet_route [-vF] del {-host|-net} Target[/prefix] [gw Gw] [metric M] [[dev] If]
-       inet_route [-vF] add {-host|-net} Target[/prefix] [gw Gw] [metric M]
-                              [netmask N] [mss Mss] [window W] [irtt I]
-                              [mod] [dyn] [reinstate] [[dev] If]
-       inet_route [-vF] add {-host|-net} Target[/prefix] [metric M] reject
-       inet_route [-FC] flush      NOT supported
-```
-
-try running 
-<pre>
-dig +short <b>website</b>
-</pre>
-and see if you get multiple ip addresses. If that is the case, replace $(dig +short **website**) with the ip addresses.
-
-For example
-
-```
-ers595@client:~$ dig +short aol.com
-67.195.231.10
-106.10.218.150
-124.108.115.87
-188.125.72.165
-66.218.87.12
-ers595@client:~$ sudo route add -host 67.195.231.10 gw 192.168.0.1
-ers595@client:~$ sudo route add -host 106.10.218.150 gw 192.168.0.1
-ers595@client:~$ sudo route add -host 124.108.115.87 gw 192.168.0.1
-ers595@client:~$ sudo route add -host 188.125.72.165 gw 192.168.0.1
-ers595@client:~$ sudo route add -host 66.218.87.12 gw 192.168.0.1
-```
-
 ## Notes
 
 ### Detaching from and attaching to a screen
@@ -495,7 +453,6 @@ replacing the part in bold with the file location.
 
 *See WARNING above before proceeding* \
 Clear any line containing the websites you want to remove.
-
 
 Save the changes, then run
 
