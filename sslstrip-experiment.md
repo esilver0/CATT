@@ -374,7 +374,7 @@ once more.
 
 Verify that this time there is an HTTPS connection even though SSLstrip is enabled. HSTS prevented the SSLstrip attack by instructing the browser to not downgrade to HTTP since a secure connection had been established.
 
-In the Firefox window where NoVNC is running, press Ctrl‑Shift‑k. Refresh the page, then click on network. Click on any of the files from acl.gov. In the headers section, look for "Strict-Transfer-Security". This is the HSTS header.
+In the Firefox window where NoVNC is running, press Ctrl‑Shift‑k. Refresh the page, then click on network. Click on any of the files from acl.gov. In the headers section, look for "Strict-Transfer-Security".
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/Strict-Transport-Security-Header_small.png)
 
