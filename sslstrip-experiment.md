@@ -154,7 +154,7 @@ In this example, the connecting IP address is 216.165.95.174. If you are connect
 Add the routing rule
 
 <pre>
-sudo route add -net <b>216.165.95.0/24</b> gw 192.168.0.2
+sudo route add -net <b>216.165.95.0/24</b> gw GATEWAY
 </pre>
 
 replacing the part in bold with the network range. This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules.
