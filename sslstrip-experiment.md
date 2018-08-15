@@ -136,31 +136,53 @@ By default, if you visit https://witestlab.poly.edu in the Firefox browser that'
 
 Open another SSH session to the client, and in it, run
 
+```
+netstat -n  | grep 6080
+```
+
+to find out the IP address that you are connecting from (as visible to the host that you are logged in to).
+
+You should see something like
+
+```
+ers595@client:~$ netstat -n  | grep 608
+tcp        0  20994 128.104.159.128:6080    216.165.95.174:17852    ESTABLISHED
+```
+
+In this example, the connecting IP address is 216.165.95.174. If you are connecting from 216.165.95.174, you would add a routing rule on the host for 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection).
+
+Add the routing rule
+
 <pre>
-netstat -n  | grep <b>PORT</b>
+sudo route add -net <b>216.165.95.0/24</b> gw 192.168.0.2
 </pre>
 
-subsituting the part is bold with the port SSH is running on. Use this to find out the IP address that you are connecting from (as visible to the host that you are logged in to).
+for this network. This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules.
 
-Then, add a routing rule for that network
+Now that you have done that, you can delete the current default gateway rule
 
-For example, if you are connected from 216.165.95.151, you would add a routing rule on the host for 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection).
+```
+sudo route del default
+```
 
-Run
-<pre>
-sudo route add -net <b>216.165.95.0/24</b> gw GATEWAY
-</pre>
+and add one for the router.
 
-substituting the current default gateway.
-
-This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules.
-Now that you have done that, you can delete the current default gateway rule and add one for the router.
-
-Run
-
-```sudo route add default gw 192.168.0.1```
+```sudo route add 192.168.0.2 gw 192.168.0.1```
 
 then all traffic from the client EXCEPT traffic to/from your own network, will be forwarded to the router.
+
+Then run
+
+```
+route -n
+```
+
+and verify that these host-specific entries appear in the routing table. For example:
+
+```
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+128.238.66.220  192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
+```
 
 For return traffic to the client from the websites to reach the router, we'll also need to set up NAT on the router. Open an SSH session to the router node, and run
 
