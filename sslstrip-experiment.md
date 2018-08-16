@@ -22,7 +22,7 @@ The target can see that the connection is insecure, but does not know whether th
 
 In this experiment, an attacker is able to use SSLstrip to switch the normally encrypted-HTTPS traffic to unencrypted-HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
 
-Normally when we visit a site that supports HTTPS, we will be directed to the HTTPS version of the site. When there is an SSLstrip attack and we visit such a site, we will receive an HTTP version of the site. The following is an example of when there is an SSLstrip attack and we visit http://nj.gov.
+When you visit a website that supports HTTPS, the site can be set up to redirect all traffic to the HTTPS version of the site. When there is an SSLstrip attack and we visit such a site, we will receive the HTTP version of the site. The following is an example of when there is an SSLstrip attack and we visit http://nj.gov.
 
 **I have a recording**
 
@@ -35,7 +35,7 @@ The following is an example of when the SSLstrip attack is disabled, but the att
 
 We are able to verify that we are served the HTTPS version of the site. In the terminal, the captured HTTP content is displayed. This time, there is much less to display since the contents of the webpage are encrypted.
 
-Websites that support HSTS are susceptible to SSLstrip when a connection is made for the first time. In the following example, we connect to http://acl.gov which supports the HSTS protocol. There is an SSLstrip attack and this is the first connection.
+Websites that support HSTS are susceptible to SSLstrip when a connection is made for the first time. In the following example, we connect to http://acl.gov which supports the HSTS protocol and HTTPS. There is an SSLstrip attack and this is the first connection.
 
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_first_time.png)
@@ -149,15 +149,13 @@ ers595@client:~$ netstat -n  | grep 6080
 tcp        0  20994 128.104.159.128:6080    <b>216.165.95.174</b>:17852    ESTABLISHED
 </pre>
 
-The part in bold is your IP address. If you are connecting from 216.165.95.174, you would add a routing rule on the host for 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection).
-
 Add the routing rule
 
 <pre>
 sudo route add -net <b>216.165.95.0/24</b> gw $(route | awk '/default/ { print $2 }')
 </pre>
 
-replacing the bold part with your network range. This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules. (When you run this command, the `$(route | awk '/default/ { print $2 }')` variable will be filled in automatically with the IP address of the default gateway).
+replacing the bold part depending on your IP address. If you are connecting from 216.165.95.174, you would add a routing rule on the host for 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection). This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules to forward to the router. (When you run this command, the `$(route | awk '/default/ { print $2 }')` variable will be filled in automatically with the IP address of the default gateway).
 
 Now that you have done that, you can delete the current default gateway rule
 
@@ -377,7 +375,7 @@ once more.
 
 Verify that this time there is an HTTPS connection even though SSLstrip is enabled. HSTS prevented the SSLstrip attack by instructing the browser to not downgrade to HTTP since a secure connection had been established.
 
-In the Firefox window where NoVNC is running, press Ctrl‑Shift‑k. Refresh the page, then click on network. Click on any of the files from acl.gov. In the headers section, look for "Strict-Transfer-Security".
+To see the HSTS header, in the Firefox window where NoVNC is running press Ctrl‑Shift‑k to open the console. Refresh the page, then click on network. Click on one of the files from acl.gov. In the headers section, look for "Strict-Transfer-Security".
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/Strict-Transport-Security-Header_small.png)
 
