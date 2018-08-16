@@ -2,6 +2,8 @@ In this experiment, we will set up an SSL stripping attack on GENI and will demo
 
 It should take about thirty minutes to run this experiment.
 
+This experiment involves running a potentially disruptive application over a private network within your slice on GENI. Take special care not to use this application in ways that may adversely affect other infrastructure outside of your slice! Users of GENI are responsible for ensuring compliance with the [GENI Resource Recommended User Policy](http://groups.geni.net/geni/raw-attachment/wiki/RUP/RUP.pdf).
+
 To reproduce this experiment on GENI, you will need an account on the [GENI Portal](http://groups.geni.net/geni/wiki/SignMeUp), and you will need to have [joined a project](http://groups.geni.net/geni/wiki/JoinAProject). You should have already [uploaded your SSH keys to the portal and know how to log in to a node with those keys](http://groups.geni.net/geni/wiki/HowTo/LoginToNodes). If you're not sure if you have those skills, you may want to try [Lab Zero](http://tinyurl.com/geni-labzero) first.
 
 * Skip to [Results](#results)
@@ -102,7 +104,7 @@ cd noVNC/
 screen ./utils/launch.sh --vnc <b>client.sslstrip.ch-geni-net.instageni.maxgigapop.net</b>:5900
 </pre>
 
-where in place of the bold part above, you use the hostname shown for the client node in the GENI Portal.
+where in place of the bold part above, you use the hostname shown for the client node in the GENI Portal. (Leave the command running. If the SSH connection is lost, you can reattach to the screen. See [Notes](#notes).)
 
 After some more lines of output, you should see a URL, e.g.:
 
@@ -111,8 +113,6 @@ Navigate to this URL:
 
     http://client.sslstrip.ch-geni-net.instageni.maxgigapop.net:6080/vnc.html?host=client.sslstrip.ch-geni-net.instageni.maxgigapop.net&port=6080
 ``` 
-
-If you press Ctrl‑C, rerun the command. To detach from or reattach to the screen, see [Notes](#notes).
 
 Open this URL in a browser. (A recent version of Google Chrome is recommended.) Enter a password when prompted. Then, at the terminal, run
 
@@ -132,13 +132,14 @@ This browser is running on the "client" node, _not_ on your own laptop. Leave th
 
 In this experiment, we will attack an exchange between this client and several websites.
 
-By default, if you visit https://witestlab.poly.edu in the Firefox browser that's running in NoVNC, traffic between the client and the website will go through the control interface on the client (that is used to log in to the client over SSH), not through the experiment interface. To demonstrate the SSLstrip attack, we'll want this traffic to go over the experiment network.
+By default, if you visit https://witestlab.poly.edu in the Firefox browser that's running in NoVNC, traffic between the client and the website will go through the control interface on the client (that is used to log in to the client over SSH), not through the experiment interface. To demonstrate the SSLstrip attack, we'll want this traffic to go over the experiment network. Before we redirect the traffic from the control interface to the experiment network, we need to see up a seperate route for the SSH connection (and VNC connection) so we can still connect to the client.
 
 Open another SSH session to the client, and in it, run
 
 ```
 netstat -n  | grep 6080
 ```
+to find out the IP address that you are connecting from (as visible to the host that you are logged in to). 6080 is the port the graphical interface is connecting to.
 
 You should see something like
 
@@ -228,12 +229,6 @@ and in the Firefox instance running in NoVNC, visit
 http://witestlab.poly.edu
 
 Make sure that the page loads, and make sure you can see exchange in your `tcpdump` window&mdash;this is how you know that traffic for this host is going through the router via the experiment network, and not through the control interface on the client. Once you have verified this, you can stop the `tcpdump` on the router.
-
-You should also verify that the page is loaded over HTTPS — the browser will show a green padlock icon in the address bar to indicate that the connection is secure:
-
-![](/blog/content/images/2018/03/sslstrip-no-attack.png)
-
-Even though we didn't specify HTTPS in the address bar, the web server at witestlab.poly.edu is configured to use HTTPS for all connections, so the page will be loaded over HTTPS. 
 
 ### Execute the man-in-the-middle attack
 
@@ -439,7 +434,7 @@ To reattach to a screen after detaching, run.
 screen -r
 ```
 
-If the SSH connection is lost, run
+To reattach to a screen after an SSH connection is lost, run
 
 ```
 screen -Dr
