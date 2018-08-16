@@ -44,7 +44,7 @@ When we connect to acl.gov and there is no SSLstrip attack, we can see that the 
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_HTTPS_top.png)
 
-In the following example, we connect to http://acl.edu again. This time we have already established a secure connection and there is an SSLstrip attack. Notice that in this case, even with an SSLstrip attack, we will connect to the HTTPS version of the site
+Now that we have already established a secure connection, we can reconnect to http://acl.edu again during an SSLstrip attack. Notice that in this case, even with an SSLstrip attack, we will still connect to the HTTPS version of the site.
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_HTTPS_top.png)
 
