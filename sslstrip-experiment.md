@@ -89,7 +89,7 @@ Starting applications specified in /users/ffund01/.vnc/xstartup
 Log file is /users/ffund01/.vnc/client.sslstrip.ch-geni-net.instageni.maxgigapop.net:0.log  
 ```
 
-Next, we will install a ["connector"](http://novnc.com/info.html) that will let us access this graphical interface from a web browser. On the "client" node, run
+Next, we will install a ["connector"](http://novnc.com/info.html) that will let us access this graphical interface from a web browser. On the client node, run
 
 ```
 git clone git://github.com/kanaka/noVNC  
@@ -102,7 +102,7 @@ cd noVNC/
 screen ./utils/launch.sh --vnc <b>client.sslstrip.ch-geni-net.instageni.maxgigapop.net</b>:5900
 </pre>
 
-where in place of the bold part above, you use the hostname shown for the "client" node in the GENI Portal.
+where in place of the bold part above, you use the hostname shown for the client node in the GENI Portal.
 
 After some more lines of output, you should see a URL, e.g.:
 
@@ -140,8 +140,6 @@ Open another SSH session to the client, and in it, run
 netstat -n  | grep 6080
 ```
 
-to find out the IP address that you are connecting from (as visible to the host that you are logged in to).
-
 You should see something like
 
 <pre>
@@ -149,13 +147,15 @@ ers595@client:~$ netstat -n  | grep 6080
 tcp        0  20994 128.104.159.128:6080    <b>216.165.95.174</b>:17852    ESTABLISHED
 </pre>
 
-Add the routing rule
+where the bold part is the IP address that you are connecting from (as visible to the host that you are logged in to).
+
+To make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules, add the routing rule
 
 <pre>
 sudo route add -net <b>216.165.95.0/24</b> gw $(route | awk '/default/ { print $2 }')
 </pre>
 
-replacing the bold part depending on your IP address. If you are connecting from 216.165.95.174, you would add a routing rule on the host for 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection). This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules to forward to the router. (When you run this command, the `$(route | awk '/default/ { print $2 }')` variable will be filled in automatically with the IP address of the default gateway).
+replacing the bold part depending on your IP address. If you are connecting from 216.165.95.174, you would replace it with 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection). When you run this command, the `$(route | awk '/default/ { print $2 }')` variable will be filled in automatically with the IP address of the default gateway.
 
 Now that you have done that, you can delete the current default gateway rule
 
