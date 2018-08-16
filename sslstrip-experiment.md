@@ -22,21 +22,17 @@ The target can see that the connection is insecure, but does not know whether th
 
 In this experiment, an attacker is able to use SSLstrip to switch the normally encrypted-HTTPS traffic to unencrypted-HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
 
-When you visit a website that supports HTTPS, the site can be set up to redirect all traffic to the HTTPS version of the site. When there is an SSLstrip attack and we visit such a site, we will receive the HTTP version of the site. The following is an example of when there is an SSLstrip attack and we visit http://nj.gov.
+When you visit a website that supports HTTPS, the site can be set up to redirect all traffic to the HTTPS version of the site. When there is an SSLstrip attack and we visit such a site, we will receive an HTTP version of the site. The following is an example of when there is an SSLstrip attack and we visit http://ny.gov. We are able to see that we are served an HTTP version of the site. Check the upper-left corner in the address bar and you should not see an HTTPS indicator. The terminal is run on the attacker node and displays the captured HTTP content between the client and the site. There is a lot of content including the HTML of the webpage.
 
 **I have a recording**
 
 
-We are able to see that we are served an HTTP version of the site. Check the upper-left corner in the address bar and you should not see an HTTPS indicator. The terminal is run on the attacker node and displays the captured HTTP content between the client and the site. There is a lot of content including the HTML of the webpage.
-
-The following is an example of when the SSLstrip attack is disabled, but the attacker is still executing an MITM attack and we visit nj.gov.
+The following is an example of when the SSLstrip attack is disabled, but the attacker is still executing an MITM attack and we visit ny.gov. We are able to verify that we are served the HTTPS version of the site. In the terminal, the captured HTTP content is displayed. This time, there is much less to display since the contents of the webpage are encrypted.
 
 **I have a recording**
 
-We are able to verify that we are served the HTTPS version of the site. In the terminal, the captured HTTP content is displayed. This time, there is much less to display since the contents of the webpage are encrypted.
 
 Websites that support HSTS are susceptible to SSLstrip when a connection is made for the first time. In the following example, we connect to http://acl.gov which supports the HSTS protocol and HTTPS. There is an SSLstrip attack and this is the first connection.
-
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_HTTP_top.png)
 
@@ -400,7 +396,7 @@ to disable the SSL stripping attack.
 
 In the Firefox window where NoVNC is running, visit
 
-http://nj.gov
+http://ny.gov
 
 for the first time. Verify the website supports HTTPS.
 
@@ -414,7 +410,7 @@ to enable the SSL stripping attack.
 
 In the Firefox window where NoVNC is running, visit
 
-http://nj.gov
+http://ny.gov
 
 for the second time.
 
