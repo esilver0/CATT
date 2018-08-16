@@ -44,7 +44,7 @@ In the following example, we connect to http://acl.edu again. This time we have 
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_not_first_time.png)
 
-Visiting a site on the HSTS preload list will always establish a secure connection. youtube.com is on the HTST preload list. In the following example, we connect to http://youtube.com for the first time during an SSLstrip attack.
+Visiting a site on the HSTS preload list will always establish a secure connection. youtube.com is on the HSTS preload list. In the following example, we connect to http://youtube.com for the first time during an SSLstrip attack.
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/youtube.png)
 
