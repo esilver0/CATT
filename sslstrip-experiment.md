@@ -38,15 +38,19 @@ We are able to verify that we are served the HTTPS version of the site. In the t
 Websites that support HSTS are susceptible to SSLstrip when a connection is made for the first time. In the following example, we connect to http://acl.gov which supports the HSTS protocol and HTTPS. There is an SSLstrip attack and this is the first connection.
 
 
-![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_first_time.png)
+![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_HTTP_top.png)
+
+When we connect to acl.gov and there is no SSLstrip attack, we can see that the site is secure.
+
+![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_HTTPS_top.png)
 
 In the following example, we connect to http://acl.edu again. This time we have already established a secure connection and there is an SSLstrip attack. Notice that in this case, even with an SSLstrip attack, we will connect to the HTTPS version of the site
 
-![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_not_first_time.png)
+![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_HTTPS_top.png)
 
 Visiting a site on the HSTS preload list will always establish a secure connection. youtube.com is on the HSTS preload list. In the following example, we connect to http://youtube.com for the first time during an SSLstrip attack.
 
-![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/youtube.png)
+![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/youtube_HTTPS_top.png)
 
 
 
