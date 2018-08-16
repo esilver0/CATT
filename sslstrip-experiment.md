@@ -145,7 +145,7 @@ to find out the IP address that you are connecting from (as visible to the host 
 You should see something like
 
 <pre>
-ers595@client:~$ netstat -n  | grep 608
+ers595@client:~$ netstat -n  | grep 6080
 tcp        0  20994 128.104.159.128:6080    <b>216.165.95.174</b>:17852    ESTABLISHED
 </pre>
 
