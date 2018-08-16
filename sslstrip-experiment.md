@@ -149,34 +149,15 @@ ers595@client:~$ netstat -n  | grep 608
 tcp        0  20994 128.104.159.128:6080    <b>216.165.95.174</b>:17852    ESTABLISHED
 </pre>
 
-The part in bold is your IP address.
-
-Run
-
-```
-route -n
-```
-
-You should see something like
-<pre>
-ers595@client:~$ route -n
-Kernel IP routing table
-Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
-0.0.0.0         <b>128.104.159.1</b>   0.0.0.0         UG    0      0        0 eth0
-128.104.159.0   0.0.0.0         255.255.255.0   U     0      0        0 eth0
-192.168.0.0     0.0.0.0         255.255.255.0   U     0      0        0 eth1
-</pre>
-The part in bold is the default gateway.
-
-If you are connecting from 216.165.95.174, you would add a routing rule on the host for 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection).
+The part in bold is your IP address. If you are connecting from 216.165.95.174, you would add a routing rule on the host for 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection).
 
 Add the routing rule
 
 <pre>
-sudo route add -net <b>NETWORK</b> gw <b>GATEWAY</b>
+sudo route add -net <b>216.165.95.0/24</b> gw $(route | awk '/default/ { print $2 }')
 </pre>
 
-replacing NETWORK with the network range and GATEWAY with the default gateway. This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules.
+replacing the bold part with your network range. This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules. (When you run this command, the $(route | awk '/default/ { print $2 }') variable will be filled in automatically with the IP address of the default gateway).
 
 Now that you have done that, you can delete the current default gateway rule
 
@@ -200,11 +181,11 @@ route -n
 
 and verify that these host-specific entries appear in the routing table. For example:
 
-```
+<pre>
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 192.168.0.2     192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
-216.165.95.0    128.104.159.1   255.255.255.0   UG    0      0        0 eth0
-```
+<b>216.165.95.0</b>    128.104.159.1   255.255.255.0   UG    0      0        0 eth0
+</pre>
 
 For return traffic to the client from the websites to reach the router, we'll also need to set up NAT on the router. Open an SSH session to the router node, and run
 
