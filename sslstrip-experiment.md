@@ -184,10 +184,16 @@ route -n
 and verify that these host-specific entries appear in the routing table. For example:
 
 <pre>
+ers595@client:~/noVNC$ route -n
+Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
-192.168.0.2     192.168.0.1     255.255.255.255 UGH   0      0        0 eth1
-<b>216.165.95.0</b>    128.104.159.1   255.255.255.0   UG    0      0        0 eth0
+0.0.0.0         192.168.0.1     0.0.0.0         UG    0      0        0 eth1
+128.104.159.0   0.0.0.0         255.255.255.0   U     0      0        0 eth0
+192.168.0.0     0.0.0.0         255.255.255.0   U     0      0        0 eth1
+<b>216.165.95.0</b>    <b>128.104.159.1</b>   255.255.255.0   UG    0      0        0 eth0
 </pre>
+
+**216.165.95.0** is your network number and **128.104.159.1** is the IP address of the default gateway.
 
 For return traffic to the client from the websites to reach the router, we'll also need to set up NAT on the router. Open an SSH session to the router node, and run
 
