@@ -10,7 +10,12 @@ To reproduce this experiment on GENI, you will need an account on the [GENI Port
 * Skip to [Run my experiment](#run-my-experiment)
 
 ## Background
- 
+
+SSLstrip is a protocol downgrade attack that allows an attacker to 
+
+**In progress**
+intercept the plaintext contents of an exchange that would normally be confidential. It involves two steps:
+
 SSLstrip is an attack on HTTPS that allows an attacker to intercept the plaintext contents of an exchange that would normally be confidential. It involves two steps:
 
 1. The attacker mounts an MITM (man-in-the-middle) attack so that traffic from the target device will be sent through the attacker.
@@ -19,6 +24,8 @@ SSLstrip is an attack on HTTPS that allows an attacker to intercept the plaintex
 The target can see that the connection is insecure, but does not know whether the connection should be secure. The website that the target visits believes the connection to be secure (since it sees an HTTPS connection to the proxy operated by the attacker).
 
 [HSTS](https://https.cio.gov/hsts/) is a protocol that helps mitigate SSLstrip attacks. When a user first establishes an HTTPS connection to a site, the site sends back a header message that says "From now on, only connect to this site over HTTPS". That information is saved by the target's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect.
+
+
 
 ## Results
 
