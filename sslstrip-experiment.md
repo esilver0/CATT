@@ -396,7 +396,7 @@ to disable the SSL stripping attack.
 
 In the Firefox window where NoVNC is running, visit
 
-http://ny.gov
+http://nj.gov
 
 for the first time. Verify the website supports HTTPS.
 
@@ -410,7 +410,7 @@ to enable the SSL stripping attack.
 
 In the Firefox window where NoVNC is running, visit
 
-http://ny.gov
+http://nj.gov
 
 for the second time.
 
