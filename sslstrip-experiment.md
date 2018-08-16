@@ -157,7 +157,7 @@ Add the routing rule
 sudo route add -net <b>216.165.95.0/24</b> gw $(route | awk '/default/ { print $2 }')
 </pre>
 
-replacing the bold part with your network range. This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules. (When you run this command, the $(route | awk '/default/ { print $2 }') variable will be filled in automatically with the IP address of the default gateway).
+replacing the bold part with your network range. This will make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules. (When you run this command, the `$(route | awk '/default/ { print $2 }')` variable will be filled in automatically with the IP address of the default gateway).
 
 Now that you have done that, you can delete the current default gateway rule
 
