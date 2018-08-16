@@ -155,7 +155,7 @@ To make sure your SSH connection (and VNC connection) keeps working even when yo
 sudo route add -net <b>216.165.95.0/24</b> gw $(route | awk '/default/ { print $2 }')
 </pre>
 
-replacing the bold part depending on your IP address. If you are connecting from 216.165.95.174, you would replace it with 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection). When you run this command, the `$(route | awk '/default/ { print $2 }')` variable will be filled in automatically with the IP address of the default gateway.
+replacing the bold part depending on your IP address. If you are connecting from 216.165.95.174, you would replace the bold with 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection). When you run this command, the `$(route | awk '/default/ { print $2 }')` variable will be filled in automatically with the IP address of the default gateway.
 
 Now that you have done that, you can delete the current default gateway rule
 
@@ -323,7 +323,7 @@ On the attacker node, run
 ```
 sudo tcpdump -s 0 -i eth1 -A tcp port http
 ```
-to display only HTTP packets. This will display the unencrypted communication between the client and the site that the attacker can see.
+to display only HTTP packets. This is the unencrypted communication between the client and the site that the attacker can see.
 
 
 In the Firefox window where NoVNC is running, visit
@@ -344,13 +344,7 @@ sudo iptables -t nat -D PREROUTING 1
 
 to stop the SSL stripping proxy and stop redirecting traffic from port 80. 
 
-Wait a minute, then run
-```
-sudo tcpdump -s 0 -i eth1 -A tcp port http
-```
-on the attacker. 
-
-In the Firefox window where NoVNC is running, visit
+You may need to wait a minute after stopping or starting SSLstrip, then in the Firefox window where NoVNC is running, visit
 
 http://acl.gov.
 
@@ -367,7 +361,7 @@ screen sslstrip -l 10000
 
 to again redirect traffic from port 80 to port 1000 and restart the SSL stripping proxy. 
 
-Wait a minute for SSLstrip to reconfigure. In the Firefox window where NoVNC is running, visit
+In the Firefox window where NoVNC is running, visit
 
 http://acl.gov
 
@@ -407,14 +401,6 @@ sudo iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to
 screen sslstrip -l 10000
 ```
 to enable the SSL stripping attack.
-
-Wait a minute, then run
-
-```
-sudo tcpdump -s 0 -i eth1 -A tcp port http
-```
-
-on the attacker to display the HTTP packets. 
 
 In the Firefox window where NoVNC is running, visit
 
