@@ -36,7 +36,7 @@ Websites that support HSTS are susceptible to SSLstrip when a connection is made
 
 In this experiment, an "attacker" is able to use SSLstrip to switch the normally encrypted-HTTPS traffic to unencrypted-HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
 
-The following is an example of what normally happens when we visit http://ny.gov. We see that we are redirected to an HTTPS version of the site. Looking at the upper-left corner of the video, we see a green-padlock icon in the address bar which indicates that the connection is secure. On the right, the terminal displays the unsecure content that the someone (other than us or the site) could normally see. (Someone could know we are accessing ny.gov, but not the content nor the specific page we are accessing.)
+The following is an example of what normally happens when we visit http://ny.gov. We see that we are redirected to an HTTPS version of the site. If you look at the upper-left corner of the video, we will see a green-padlock icon in the address bar which indicates that the connection is secure. On the right, the terminal displays the unsecure content that the someone (other than us or the site) could normally see. (Someone could know we are accessing ny.gov, but not the content nor the specific page we are accessing.)
 
 **I have a recording**
 
