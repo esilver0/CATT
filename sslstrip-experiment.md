@@ -27,11 +27,16 @@ The target can see that the connection is insecure, but does not know whether th
 
 
 
+When you visit a website that supports HTTPS, the site can be set up to redirect all traffic to the HTTPS version of the site. When there is an SSLstrip attack and we visit such a site, we will receive an HTTP version of the site.
+
+Not all websites support HSTS. It is an opt-in protocol that requires proper configuration. First, the website has to support HTTPS. Second, the website has to include [HSTS response headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security).
+
+
 ## Results
 
 In this experiment, an attacker is able to use SSLstrip to switch the normally encrypted-HTTPS traffic to unencrypted-HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
 
-When you visit a website that supports HTTPS, the site can be set up to redirect all traffic to the HTTPS version of the site. When there is an SSLstrip attack and we visit such a site, we will receive an HTTP version of the site. The following is an example of when there is an SSLstrip attack and we visit http://ny.gov. We are able to see that we are served an HTTP version of the site. Check the upper-left corner in the address bar and you should not see an HTTPS indicator. The terminal is run on the attacker node and displays the captured HTTP content between the client and the site. There is a lot of content including the HTML of the webpage.
+The following is an example of when there is an SSLstrip attack and we visit http://ny.gov. We are able to see that we are served an HTTP version of the site. Check the upper-left corner in the address bar and you should not see an HTTPS indicator. The terminal is run on the attacker node and displays the captured HTTP content between the client and the site. There is a lot of content including the HTML of the webpage.
 
 **I have a recording**
 
@@ -139,31 +144,34 @@ This browser is running on the "client" node, _not_ on your own laptop. Leave th
 
 In this experiment, we will attack an exchange between this client and several websites.
 
-By default, if you visit https://witestlab.poly.edu in the Firefox browser that's running in NoVNC, traffic between the client and the website will go through the control interface on the client (that is used to log in to the client over SSH), not through the experiment interface. To demonstrate the SSLstrip attack, we'll want this traffic to go over the experiment network. Before we redirect the traffic from the control interface to the experiment network, we need to see up a seperate route for the SSH connection (and VNC connection) so we can still connect to the client.
+By default, if you visit https://witestlab.poly.edu in the Firefox browser that's running in NoVNC, traffic between the client and the website will go through the control interface on the client (that is used to log in to the client over SSH), not through the experiment interface. To demonstrate the SSLstrip attack, we'll want this traffic to go over the experiment network. 
+
+Before we redirect the traffic through the router on the experiment interface, we need to set up a seperate route for the SSH connection (and VNC connection) so we can still connect to the client. First, we need to find out the IP address that you are connecting from (as visible to the host that you are logged in to). 
 
 Open another SSH session to the client, and in it, run
 
 ```
-netstat -n  | grep 6080
+netstat -n  | grep :22
 ```
-to find out the IP address that you are connecting from (as visible to the host that you are logged in to). 6080 is the port the graphical interface is connecting to.
 
-You should see something like
+The IP address is in listed under Foreign Address. For example, in the output below the IP address we want is 216.165.95.174.
 
 <pre>
 ers595@client:~$ netstat -n  | grep 6080
-tcp        0  20994 128.104.159.128:6080    <b>216.165.95.174</b>:17852    ESTABLISHED
+Active Internet connections (w/o servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0  20994 128.104.159.128:6080    216.165.95.174:17852    ESTABLISHED
 </pre>
 
-where the bold part is the IP address that you are connecting from (as visible to the host that you are logged in to).
 
-To make sure your SSH connection (and VNC connection) keeps working even when you change the routing rules, add the routing rule
+
+To set up a seperate route for the SSH connections, add the routing rule
 
 <pre>
-sudo route add -net <b>216.165.95.0/24</b> gw $(route | awk '/default/ { print $2 }')
+sudo route add -net <b>216.165.95.0/24</b> gw $(netstat -r | awk '/default/ { print $2 }')
 </pre>
 
-replacing the bold part depending on your IP address. If you are connecting from 216.165.95.174, you would replace the bold with 216.165.95.0/24 (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection). When you run this command, the `$(route | awk '/default/ { print $2 }')` variable will be filled in automatically with the IP address of the default gateway.
+replacing the bold part depending on your IP address. If you are connecting from 216.165.95.174, you would replace the bold with "216.165.95.0/24" (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection). When you run this command, the `$(netstat -r | awk '/default/ { print $2 }')` variable will be filled in automatically with the IP address of the default gateway&mdash;The `netstat -r` command outputs the Kernel IP routing table and the rest selects the correct IP address.
 
 Now that you have done that, you can delete the current default gateway rule
 
@@ -377,7 +385,7 @@ once more.
 
 Verify that this time there is an HTTPS connection even though SSLstrip is enabled. HSTS prevented the SSLstrip attack by instructing the browser to not downgrade to HTTP since a secure connection had been established.
 
-To see the HSTS header, in the Firefox window where NoVNC is running press Ctrl‑Shift‑k to open the console. Refresh the page, then click on network. Click on one of the files from acl.gov. In the headers section, look for "Strict-Transfer-Security".
+To see the HSTS header, in the Firefox window where NoVNC is running press Ctrl‑Shift‑k to open the console. click on network, then refresh the page. Scroll to the top ancd click on the top file from acl.gov. In the headers section, look for "Strict-Transfer-Security". 
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/Strict-Transport-Security-Header_small.png)
 
@@ -385,7 +393,6 @@ To see the HSTS header, in the Firefox window where NoVNC is running press Ctrl�
 
 #### Visit a site that does not support HSTS
 
-Not all websites support HSTS. It is an opt-in protocol that requires proper configuration. First, the website has to support HTTPS. Second, the website has to include [HSTS response headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security).
 
 On an SSH session on the attacker, run
 
@@ -416,9 +423,9 @@ http://nj.gov
 
 for the second time.
 
-Verify that the connection is via HTTP even though a connection via HTTPS was already established.
+Verify that the connection is via HTTP even though a connection via HTTPS was already established. Using the same steps as before, check on the console to see if you can find an HSTS header (You should not). After you look, you can close the console.
 
-> _**Note**: In the event that the connection is via HTTPS, it is possible that the website has since started supporting HSTS. Here is a [list of websites](https://pulse.cio.gov/https/domains/) with indication as to whether or not they support HTTPS, HSTS, etc._
+> _**Note**: At the time of writing, the website did not support HSTS. If you see an HSTS header, the website has since started supporting HSTS. In the [Notes](#notes) section there is a list of websites with indication as to whether or not they support HTTPS, HSTS, etc._
 
 #### Visiting a site on the HSTS preload list
 
@@ -432,6 +439,9 @@ for the first time.
 
 Verify that there is an HTTPS connection and that youtube.com is on the [list](https://hg.mozilla.org/releases/mozilla-release/raw-file/tip/security/manager/ssl/nsSTSPreloadList.inc).
 ## Notes
+
+These are a [list of websites](https://pulse.cio.gov/https/domains/)
+Federal websites of the United States.
 
 ### Detaching from and attaching to a screen
 
