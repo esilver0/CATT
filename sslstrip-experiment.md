@@ -337,9 +337,9 @@ to start the SSL stripping proxy.
 
 On the attacker node, run
 ```
-sudo tcpdump -s 0 -i eth1 -A tcp port http
+sudo tcpdump -s 0 -i eth1 -A tcp port http | tee traffic.txt
 ```
-to display only HTTP packets. This is the unencrypted communication between the client and the site that the attacker can see.
+to display only HTTP packets and output to the file traffic.txt. This is the unencrypted communication between the client and the site that the attacker can see.
 
 
 In the Firefox window where NoVNC is running, visit
