@@ -1,4 +1,4 @@
-In this experiment, we will set up an SSL stripping attack on GENI and will demonstrate what the attack does to the encrypted communication between a client and a site. We will examine what information an “attacker” can see due to the attack and under what conditions the attack works.
+In this experiment, we will set up an SSL stripping attack on GENI and will demonstrate what the attack does to the encrypted communication between a client and a site. We will examine what information an “attacker” can see due to the attack and under what conditions the attack is successful.
 
 It should take about thirty minutes to run this experiment.
 
@@ -30,38 +30,38 @@ The target can see that the connection is insecure, but does not know whether th
 When you visit a website that supports HTTPS, the site can be set up to redirect all traffic to the HTTPS version of the site. When there is an SSLstrip attack and we visit such a site, we will receive an HTTP version of the site.
 
 Not all websites support HSTS. It is an opt-in protocol that requires proper configuration. First, the website has to support HTTPS. Second, the website has to include [HSTS response headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security).
-
+Websites that support HSTS are susceptible to SSLstrip when a connection is made for the first time.
 
 ## Results
 
-In this experiment, an attacker is able to use SSLstrip to switch the normally encrypted-HTTPS traffic to unencrypted-HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
+In this experiment, an "attacker" is able to use SSLstrip to switch the normally encrypted-HTTPS traffic to unencrypted-HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
 
-The following is an example of when there is an SSLstrip attack and we visit http://ny.gov. We are able to see that we are served an HTTP version of the site. Check the upper-left corner in the address bar and you should not see an HTTPS indicator. The terminal is run on the attacker node and displays the captured HTTP content between the client and the site. There is a lot of content including the HTML of the webpage.
-
-**I have a recording**
-
-
-The following is an example of when the SSLstrip attack is disabled, but the attacker is still executing an MITM attack and we visit ny.gov. We are able to verify that we are served the HTTPS version of the site. In the terminal, the captured HTTP content is displayed. This time, there is much less to display since the contents of the webpage are encrypted.
+The following is an example of what normally happens when we visit http://ny.gov. We see that we are redirected to an HTTPS version of the site. Looking at the upper-left corner of the video, we see a green-padlock icon in the address bar which indicates that the connection is secure. On the right, the terminal displays the unsecure content that the someone (other than us or the site) could normally see. (Someone could know we are accessing ny.gov, but not the content nor the specific page we are accessing.)
 
 **I have a recording**
 
+When an attacker executes an SSLstrip attack and we visit http://ny.gov, we see that we are served an HTTP version of the site. In the address bar there is no green-padlock icon since the connection is unsecure. On the right, the terminal displays the unsecure content that the attacker can see. Which includes all the content that would normally be private.
 
-Websites that support HSTS are susceptible to SSLstrip when a connection is made for the first time. In the following example, we connect to http://acl.gov which supports the HSTS protocol and HTTPS. There is an SSLstrip attack and this is the first connection.
+**I have a recording**
+
+Normally, when we visit http://acl.gov, we will be directed to the HTTPS version of the site.
+
+![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_HTTPS_top.png)
+
+
+In the following example, we connect to http://acl.gov which supports HSTS. There is an SSLstrip attack and this is the first connection. We can see that the connection is unsecure.
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_HTTP_top.png)
 
-When we connect to acl.gov and there is no SSLstrip attack, we can see that the site is secure.
+
+In the following example, we connect to http://acl.gov after having already established a secure connection with the site. There is an SSLstrip attack. We can see that the connection is secure.
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_HTTPS_top.png)
 
-Now that we have already established a secure connection, we can reconnect to http://acl.edu again during an SSLstrip attack. Notice that in this case, even with an SSLstrip attack, we will still connect to the HTTPS version of the site.
 
-![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_HTTPS_top.png)
-
-Visiting a site on the HSTS preload list will always establish a secure connection. youtube.com is on the HSTS preload list. In the following example, we connect to http://youtube.com for the first time during an SSLstrip attack.
+In the following example, we connect to http://youtube.com during an SSLstrip attack. youtube.com is on the HSTS preload list and we connect for the first time. We can see that the connection is secure.
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/youtube_HTTPS_top.png)
-
 
 
 ## Run my experiment
