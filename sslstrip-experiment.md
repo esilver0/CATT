@@ -154,13 +154,11 @@ Open another SSH session to the client, and in it, run
 netstat -n  | grep :22
 ```
 
-The IP address is in listed under Foreign Address. For example, in the output below the IP address we want is 216.165.95.174.
+For example, in the output below the IP address we want is 216.165.95.174.
 
 <pre>
-ers595@client:~$ netstat -n  | grep 6080
-Active Internet connections (w/o servers)
-Proto Recv-Q Send-Q Local Address           Foreign Address         State
-tcp        0  20994 128.104.159.128:6080    216.165.95.174:17852    ESTABLISHED
+ers595@client:~$ netstat -n  | grep :22
+tcp        0  20994 128.104.159.128:22    216.165.95.174:17852    ESTABLISHED
 </pre>
 
 
