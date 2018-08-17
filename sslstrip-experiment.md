@@ -14,6 +14,8 @@ To reproduce this experiment on GENI, you will need an account on the [GENI Port
 SSLstrip is a protocol downgrade attack that allows an attacker to 
 
 **In progress**
+
+
 intercept the plaintext contents of an exchange that would normally be confidential. It involves two steps:
 
 SSLstrip is an attack on HTTPS that allows an attacker to intercept the plaintext contents of an exchange that would normally be confidential. It involves two steps:
@@ -423,7 +425,7 @@ for the second time.
 
 Verify that the connection is via HTTP even though a connection via HTTPS was already established. Using the same steps as before, check on the console to see if you can find an HSTS header (You should not). After you look, you can close the console.
 
-> _**Note**: At the time of writing, the website did not support HSTS. If you see an HSTS header, the website has since started supporting HSTS. In the [Notes](#notes) section there is a list of websites with indication as to whether or not they support HTTPS, HSTS, etc._
+> _**Note**: At the time of writing, the website did not support HSTS. If you see an HSTS header, the website has since started supporting HSTS. See [Notes](#notes)._
 
 #### Visiting a site on the HSTS preload list
 
@@ -438,8 +440,7 @@ for the first time.
 Verify that there is an HTTPS connection and that youtube.com is on the [list](https://hg.mozilla.org/releases/mozilla-release/raw-file/tip/security/manager/ssl/nsSTSPreloadList.inc).
 ## Notes
 
-These are a [list of websites](https://pulse.cio.gov/https/domains/)
-Federal websites of the United States.
+A list of United States Federal government websites with indication as to whether or not they support HTTPS, HSTS, etc. can be found at https://pulse.cio.gov/https/domains/. 
 
 ### Detaching from and attaching to a screen
 
