@@ -1,4 +1,4 @@
-In this experiment, we will set up an SSL stripping attack on GENI and will demonstrate what the attack does to the encrypted communication between a client and a site. We will examine what information an “attacker” can see due to the attack and under what conditions the attack is successful.
+In this experiment, we will set up an SSL stripping attack on GENI and will demonstrate what the attack does to the encrypted communication between a client and a site. We will examine what information an “attacker” can see with the attack and under what conditions the attack works.
 
 It should take about thirty minutes to run this experiment.
 
@@ -11,38 +11,37 @@ To reproduce this experiment on GENI, you will need an account on the [GENI Port
 
 ## Background
 
-SSLstrip is a protocol downgrade attack that allows an attacker to 
+SSLstrip is a protocol-downgrade attack that allows an attacker to intercept the contents of an exchange that would normally be confidential.
 
 **In progress**
 
 
 intercept the plaintext contents of an exchange that would normally be confidential. It involves two steps:
 
-SSLstrip is an attack on HTTPS that allows an attacker to intercept the plaintext contents of an exchange that would normally be confidential. It involves two steps:
+SSLstrip is an attack on HTTP that allows an attacker to intercept the plaintext contents of an exchange that would normally be confidential. It involves two steps:
 
 1. The attacker mounts an MITM (man-in-the-middle) attack so that traffic from the target device will be sent through the attacker.
 2. When the target visits a website, the attacker acts a proxy, serving an HTTP (non-encrypted) version of the site to the target. Meanwhile, the attacker relays all of the target's actions on the site to the real destination over HTTPS.
 
-The target can see that the connection is insecure, but does not know whether the connection should be secure. The website that the target visits believes the connection to be secure (since it sees an HTTPS connection to the proxy operated by the attacker).
+The target can see that the connection is unsecure, but does not know whether the connection should be secure. The website that the target visits believes the connection to be secure (since it sees an HTTPS connection to the proxy operated by the attacker).
 
-[HSTS](https://https.cio.gov/hsts/) is a protocol that helps mitigate SSLstrip attacks. When a user first establishes an HTTPS connection to a site, the site sends back a header message that says "From now on, only connect to this site over HTTPS". That information is saved by the target's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect.
+[HSTS](https://https.cio.gov/hsts/) is a protocol that helps mitigate SSLstrip attacks. Each time a user establishes an HTTPS connection to a site, the site sends back a header message that says "From now on, only connect to this site over HTTPS". That information is saved by the users's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. Not all websites support HSTS. It is an opt-in protocol that requires proper configuration. First, the website has to support HTTPS. Second, the website has to include [HSTS response headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security).
+
+Connections to websites that support HSTS are still susceptible to SSLstrip when a connection is made for the first time (or if a secure connection has not previously been made).
 
 
 
 When you visit a website that supports HTTPS, the site can be set up to redirect all traffic to the HTTPS version of the site. When there is an SSLstrip attack and we visit such a site, we will receive an HTTP version of the site.
 
-Not all websites support HSTS. It is an opt-in protocol that requires proper configuration. First, the website has to support HTTPS. Second, the website has to include [HSTS response headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security).
-Websites that support HSTS are susceptible to SSLstrip when a connection is made for the first time.
-
 ## Results
 
-In this experiment, an "attacker" is able to use SSLstrip to switch the normally encrypted-HTTPS traffic to unencrypted-HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
+In this experiment, an "attacker" is able to use SSLstrip to switch normally encrypted-HTTPS traffic to unencrypted-HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
 
-The following is an example of what normally happens when we visit http://ny.gov. We see that we are redirected to an HTTPS version of the site. If you look at the upper-left corner of the video, we will see a green-padlock icon in the address bar which indicates that the connection is secure. On the right, the terminal displays the unsecure content that the someone (other than us or the site) could normally see. (Someone could know we are accessing ny.gov, but not the content nor the specific page we are accessing.)
+The following is an example of what normally happens when we visit http://ny.gov. We see that we are redirected to an HTTPS version of the site. If you look at the upper-left corner of the video, you will see a green-padlock icon in the address bar which indicates that the connection is secure. On the right, the terminal displays the unsecure content that the someone (other than us or the site) could normally see. (Someone could know we are accessing ny.gov, but not the content.)
 
 **I have a recording**
 
-When an attacker executes an SSLstrip attack and we visit http://ny.gov, we see that we are served an HTTP version of the site. In the address bar there is no green-padlock icon since the connection is unsecure. On the right, the terminal displays the unsecure content that the attacker can see. Which includes all the content that would normally be private.
+When an attacker executes an SSLstrip attack and we visit http://ny.gov, we see that we are served an HTTP version of the site. In the address bar there is no green-padlock icon since the connection is unsecure. On the right, the terminal displays the unsecure content that the attacker can see which includes all the content that would normally be private.
 
 **I have a recording**
 
@@ -146,32 +145,23 @@ This browser is running on the "client" node, _not_ on your own laptop. Leave th
 
 In this experiment, we will attack an exchange between this client and several websites.
 
-By default, if you visit https://witestlab.poly.edu in the Firefox browser that's running in NoVNC, traffic between the client and the website will go through the control interface on the client (that is used to log in to the client over SSH), not through the experiment interface. To demonstrate the SSLstrip attack, we'll want this traffic to go over the experiment network. 
-
-Before we redirect the traffic through the router on the experiment interface, we need to set up a seperate route for the SSH connection (and VNC connection) so we can still connect to the client. First, we need to find out the IP address that you are connecting from (as visible to the host that you are logged in to). 
+By default, if you visit https://witestlab.poly.edu in the Firefox browser that's running in NoVNC, traffic between the client and the website will go through the control interface on the client (that is used to log in to the client over SSH), not through the experiment interface. To demonstrate the SSL stripping attack, we'll want this traffic to go over the experiment network. Before we redirect the traffic, we need to set up a seperate route for the SSH connection (and VNC connection) to continue to go through the control interface so we can still connect to the client. 
 
 Open another SSH session to the client, and in it, run
 
 ```
-netstat -n  | grep :22
+netstat -n | awk '/:22 / || /:6080 / {print $5}' | cut -d: -f1 | sort -u
 ```
 
-For example, in the output below the IP address we want is 216.165.95.174.
+to find out the IP address that you are connecting from (as visible to the host that you are logged in to). (The command outputs the IP addresses connected to ports 22 and 6080 on the client&mdash;the SSH connection is on port 22 and the VNC connection is on port 6080.)
 
-<pre>
-ers595@client:~$ netstat -n  | grep :22
-tcp        0  20994 128.104.159.128:22    216.165.95.174:17852    ESTABLISHED
-</pre>
-
-
-
-To set up a seperate route for the SSH connections, add the routing rule
+Add the routing rule
 
 <pre>
 sudo route add -net <b>216.165.95.0/24</b> gw $(netstat -r | awk '/default/ { print $2 }')
 </pre>
 
-replacing the bold part depending on your IP address. If you are connecting from 216.165.95.174, you would replace the bold with "216.165.95.0/24" (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection). When you run this command, the `$(netstat -r | awk '/default/ { print $2 }')` variable will be filled in automatically with the IP address of the default gateway&mdash;The `netstat -r` command outputs the Kernel IP routing table and the rest selects the correct IP address.
+to set up the route for your IP address. If you are connecting from 216.165.95.174, you would replace the bold part with "216.165.95.0/24" (the whole network range, not the IP only, because if the network you are on uses NAT pooling then you might break your SSH connection). (When you run this command, the `$(netstat -r | awk '/default/ { print $2 }')` variable will be filled in automatically with the IP address of the default gateway&mdash;the `netstat -r` command retrieves the Kernel IP routing table and `awk '/default/ { print $2 }'` selects the desired IP address from the table.)
 
 Now that you have done that, you can delete the current default gateway rule
 
@@ -179,7 +169,7 @@ Now that you have done that, you can delete the current default gateway rule
 sudo route del default
 ```
 
-and add one for the router.
+and add one for the router
 
 ```
 sudo route add default gw 192.168.0.1
@@ -337,10 +327,9 @@ to start the SSL stripping proxy.
 
 On the attacker node, run
 ```
-sudo tcpdump -s 1514 -i eth1 'port 80' -U -w - | tee traffic.pcap | tcpdump -nnxxXSs 1514 -r -
+sudo tcpdump -s 1514 -i eth1 'port 80' -U -w - | tee unencrypted.pcap | tcpdump -nnxxXSs 1514 -r -
 ```
-to display only HTTP packets and output to the file traffic.pcap. This is the unencrypted communication between the client and the site that the attacker can see.
-
+to display the unencrypted communication between the client and the site that the attacker can see. (The output is saved to unencrypted.pcap)
 
 In the Firefox window where NoVNC is running, visit
 
@@ -348,8 +337,7 @@ http://acl.gov
 
 for the first time. You should verify that the page loads over HTTP. 
 
-
-The web server at acl.gov is configured to use HTTPS for all connections. Therefore, if we stop SSlstrip before we visit acl.gov, the page should load over HTTPS.
+The web server at acl.gov is configured to redirect to HTTPS for HTTP connections. Therefore, if we stop SSlstrip before we visit http://acl.gov, the page should load over HTTPS.
 
 On an SSH session on the attacker, run
 
@@ -358,15 +346,19 @@ killall sslstrip
 sudo iptables -t nat -D PREROUTING 1
 ```
 
-to stop the SSL stripping proxy and stop redirecting traffic from port 80. 
+to stop the SSL stripping proxy and stop redirecting traffic from port 80. (You may need to wait a minute for the change to take effect.)
 
-You may need to wait a minute after stopping or starting SSLstrip, then in the Firefox window where NoVNC is running, visit
+In the Firefox window where NoVNC is running, visit
 
 http://acl.gov.
 
-Check that this time the connection is over HTTPS demonstrating that the SSLstrip attack works.
+Check that this time the connection is over HTTPS.
+
+When SSLstrip was enabled, the page loaded over HTTP. When SSLstrip was disabled, the page loaded over HTTPS. Together, demonstrating that the SSLstrip attack worked.
 
 #### Visit a site that you have already established a secure connection with
+
+The web server at acl.gov is configured to send out HSTS headers. Now that acl.gov has been connected to securely, reconnect to the site with SSLstrip enabled.
 
 On the attacker node, run
 
@@ -375,7 +367,7 @@ sudo iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to
 screen sslstrip -l 10000
 ```
 
-to again redirect traffic from port 80 to port 1000 and restart the SSL stripping proxy. 
+to redirect traffic from port 80 to port 1000 and restart the SSL stripping proxy. 
 
 In the Firefox window where NoVNC is running, visit
 
@@ -383,16 +375,15 @@ http://acl.gov
 
 once more.
 
-Verify that this time there is an HTTPS connection even though SSLstrip is enabled. HSTS prevented the SSLstrip attack by instructing the browser to not downgrade to HTTP since a secure connection had been established.
+Verify that this time there is an HTTPS connection even though SSLstrip is enabled.
 
-To see the HSTS header, in the Firefox window where NoVNC is running press Ctrl‑Shift‑k to open the console. click on network, then refresh the page. Scroll to the top ancd click on the top file from acl.gov. In the headers section, look for "Strict-Transfer-Security". 
+To see the HSTS header, in the Firefox window where NoVNC is running press Ctrl&#8209;Shift&#8209;k to open the console. Click on network, then refresh the page. Scroll to the top and click on the top file. In the headers section, look for "Strict-Transfer-Security". 
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/Strict-Transport-Security-Header_small.png)
 
 *Optional: Once a site that supports HSTS has been visited with a secure connection, you can delete the history enabling SSLstrip to take effect. See [Delete HSTS history](#delete-hsts-history)*
 
 #### Visit a site that does not support HSTS
-
 
 On an SSH session on the attacker, run
 
@@ -427,7 +418,7 @@ Verify that the connection is via HTTP even though a connection via HTTPS was al
 
 > _**Note**: At the time of writing, the website did not support HSTS. If you see an HSTS header, the website has since started supporting HSTS. See [Notes](#notes)._
 
-#### Visiting a site on the HSTS preload list
+#### Visit a site on the HSTS preload list
 
 The browser will not accept an HTTP (insecure) request from any website on the [HSTS preload list](https://hg.mozilla.org/releases/mozilla-release/file/tip/security/manager/ssl/nsSTSPreloadList.inc) even if you are visiting the site for the first time. A site on the preload list must support HTTPS throughout its site and provide proper HSTS header messages.
 
@@ -444,7 +435,7 @@ A list of United States Federal government websites with indication as to whethe
 
 ### Detaching from and attaching to a screen
 
-Press Ctrl‑A then Ctrl‑D to detach from a screen without terminating the process.
+Press Ctrl&#8209;A then Ctrl&#8209;D to detach from a screen without terminating the process.
 To reattach to a screen after detaching, run.
 ```
 screen -r
