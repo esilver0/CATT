@@ -11,7 +11,7 @@ To reproduce this experiment on GENI, you will need an account on the [GENI Port
 
 ## Background
 
-SSLstrip is a protocol-downgrade attack that allows an attacker to intercept the contents of an exchange that would normally be confidential. It can occur when an exchange that is supposed to result in an encrypted connection is initiated insecurely (non-encrypted). E.g. connecting to a site over HTTP that redirects to HTTPS or clicking on a link (to a secure site) from an insecure site.
+SSLstrip is a protocol-downgrade attack that allows an attacker to intercept the contents of an exchange that would normally be confidential. It can occur when an exchange that is supposed to result in an encrypted connection is initiated insecurely (non-encrypted). E.g. connecting to a site over HTTP that redirects to HTTPS or clicking on a link to a secure site from an insecure site.
 
 The attack involves two steps:
 
