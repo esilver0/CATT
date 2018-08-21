@@ -20,7 +20,7 @@ The attack involves two steps:
 
 The target can see that the connection is insecure, but does not know whether the connection should be secure. The website that the target visits cannot see the attack and believes the connection to be secure (since it sees an HTTPS connection to the proxy operated by the attacker).
 
-[HSTS](https://https.cio.gov/hsts/) (HTTP Strict Transfer Security) is a protocol that helps mitigate SSLstrip attacks. Each time a user establishes an HTTPS connection to a site, the site sends back a header message that says "From now on [usually for two years], only connect to this site over HTTPS". That information is saved by the user's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. It is important to note that not all websites include HSTS response headers. 
+[HSTS](https://https.cio.gov/hsts/) (HTTP Strict Transfer Security) is a protocol that helps mitigate SSLstrip attacks. Each time a user establishes an HTTPS connection to a site, the site sends back a header message that says "From now on [usually for two years], only connect to this site over HTTPS". That information is saved by the user's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. It is important to note that not all websites that support HTTPS include HSTS response headers. 
 
 Connections to websites that support HSTS are still susceptible to SSLstrip when a connection is made for the first time or if a secure connection has not previously been made (since the browser has not yet received an HSTS header). However, there is an HSTS Preload list that comes with the browser. The browser will not accept an HTTP request from any website on the preload list even if you are visiting the site for the first time. A site on the preload list must support HTTPS throughout its site and provide properly-configured HSTS response headers.
 
@@ -28,11 +28,11 @@ Connections to websites that support HSTS are still susceptible to SSLstrip when
 
 In this experiment, an "attacker" is able to use SSLstrip to switch normally encrypted-HTTPS traffic to unencrypted-HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
 
-The following is an example of what normally happens when we visit http://ny.gov. We see that we are redirected to an HTTPS version of the site. If you look at the upper-left corner of the video, you will see a green-padlock icon in the address bar which indicates that the connection is secure. On the right, the terminal displays the unsecure content that the someone (other than us or the site) could normally see. (Someone could know we are accessing ny.gov, but not the content.)
+The following is an example of what normally happens when we visit http://ny.gov. We see that we are redirected to an HTTPS version of the site (https://www.ny.gov). If you look at the upper-left corner of the video, you will see a green-padlock icon in the address bar and the URL will include https:// which indicate that the connection is encrypted. On the right, the terminal displays insecure content that the someone (other than us or the site) could normally see. (Someone could know we are accessing ny.gov, but not know what we are doing on the site since the content is encrypted.)
 
 **I have a recording**
 
-When an attacker executes an SSLstrip attack and we visit http://ny.gov, we see that we are served an HTTP version of the site. In the address bar there is no green-padlock icon since the connection is unsecure. On the right, the terminal displays the unsecure content that the attacker can see which includes all the content that would normally be private.
+When an attacker executes an SSLstrip attack and we visit http://ny.gov, we see that we are served an HTTP version of the site (www.nyu.edu). In the address bar there is no green-padlock icon and there is no https:// since the connection is insecure (Firefox, by default, will trim the URL and not display http://). On the right, the terminal displays the insecure content that the attacker can see which includes all the content that would normally be private.
 
 **I have a recording**
 
@@ -41,7 +41,7 @@ Normally, when we visit http://acl.gov, we will be directed to the HTTPS version
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_HTTPS_top.png)
 
 
-In the following example, we connect to http://acl.gov which supports HSTS. There is an SSLstrip attack and this is the first connection. We can see that the connection is unsecure.
+In the following example, we connect to http://acl.gov which supports HSTS. There is an SSLstrip attack and this is the first connection. We can see that the connection is insecure.
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/acl_HTTP_top.png)
 
@@ -322,7 +322,7 @@ On the attacker node, run
 ```
 sudo tcpdump -s 1514 -i eth1 'port 80' -U -w - | tee unencrypted.pcap | tcpdump -nnxxXSs 1514 -r -
 ```
-to display the unencrypted communication between the client and the site that the attacker can see. (The output is saved to unencrypted.pcap)
+to display the traffic on port 80. This is unencrypted communication between the client and the site that the attacker can see. The output is saved to unencrypted.pcap.
 
 In the Firefox window where NoVNC is running, visit
 
@@ -330,7 +330,7 @@ http://acl.gov
 
 for the first time. You should verify that the page loads over HTTP. 
 
-The web server at acl.gov is configured to redirect to HTTPS for HTTP connections. Therefore, if we stop SSlstrip before we visit http://acl.gov, the page should load over HTTPS.
+The web server at acl.gov is configured to redirect to HTTPS for HTTP connections. Therefore, if we stop SSlstrip before we visit the site again, the page should load over HTTPS.
 
 On an SSH session on the attacker, run
 
@@ -345,9 +345,9 @@ In the Firefox window where NoVNC is running, visit
 
 http://acl.gov.
 
-Check that this time the connection is over HTTPS.
+Verify that this time the connection is over HTTPS.
 
-When SSLstrip was enabled, the page loaded over HTTP. When SSLstrip was disabled, the page loaded over HTTPS. Together, demonstrating that the SSLstrip attack worked.
+When SSLstrip was turned off we received an HTTPS version of the site, but when it was turned on we received an HTTP version of the site, demonstrating that SSLstrip works.
 
 #### Visit a site that you have already established a secure connection with
 
@@ -409,8 +409,7 @@ for the second time.
 
 Verify that the connection is via HTTP even though a connection via HTTPS was already established. Using the same steps as before, check on the console to see if you can find an HSTS header (You should not). After you look, you can close the console.
 
-> _**Note**: At the time of writing, the website did not support HSTS. If you see an HSTS header, the website has since started supporting HSTS. See [Notes](#notes)._
-
+> _**Note**: At the time of writing, the website did not support HSTS. If you see an HSTS header, see [Notes](#notes) for alternative websites._
 #### Visit a site on the HSTS preload list
 
 In the Firefox window where NoVNC is running, visit
@@ -422,7 +421,13 @@ for the first time.
 Verify that there is an HTTPS connection and that youtube.com is on the [list](https://hg.mozilla.org/releases/mozilla-release/raw-file/tip/security/manager/ssl/nsSTSPreloadList.inc).
 ## Notes
 
-A list of United States Federal government websites with indication as to whether or not they support HTTPS, HSTS, etc. can be found at https://pulse.cio.gov/https/domains/. 
+### Useful Websites
+
+A list of United States Federal government websites with indication as to whether or not they support HTTPS, HSTS, etc. can be found at https://pulse.cio.gov/https/domains/.
+
+More information about HSTS response headers can be found at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security.
+
+
 
 ### Detaching from and attaching to a screen
 
