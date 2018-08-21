@@ -62,7 +62,7 @@ First, reserve your resources. You will need one publicly routable IP&mdash;if y
 
 In the GENI Portal, create a new slice, then click "Add Resources". Load the RSpec from the URL: https://raw.githubusercontent.com/esilver0/CATT/master/sslstrip_request_rspec.xml
 
-![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/sslstrip_topology_small.png)
+![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/sslstrip_topology.png)
 
 This should load a topology onto your canvas, with a client, a router, and an attacker. The RSpec also includes commands to install necessary software on the nodes. Click on "Site 1" and choose an InstaGENI site to bind to, then reserve your resources.
 
