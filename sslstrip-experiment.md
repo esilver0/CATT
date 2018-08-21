@@ -11,7 +11,7 @@ To reproduce this experiment on GENI, you will need an account on the [GENI Port
 
 ## Background
 
-SSLstrip is a protocol-downgrade attack that allows an attacker to intercept the contents of an exchange that would normally be confidential. It can occur when an exchange that is supposed to result in a secure (encrypted) connection is initiated insecurely (non-encrypted). E.g. connecting to a site over HTTP that redirects to HTTPS or clicking on a link (to a secure site) from an insecure site.
+SSLstrip is a protocol-downgrade attack that allows an attacker to intercept the contents of an exchange that would normally be confidential. It can occur when an exchange that is supposed to result in an encrypted connection is initiated insecurely (non-encrypted). E.g. connecting to a site over HTTP that redirects to HTTPS or clicking on a link (to a secure site) from an insecure site.
 
 The attack involves two steps:
 
@@ -22,17 +22,17 @@ The target can see that the connection is insecure, but does not know whether th
 
 [HSTS](https://https.cio.gov/hsts/) (HTTP Strict Transfer Security) is a protocol that helps mitigate SSLstrip attacks. Each time a user establishes an HTTPS connection to a site, the site sends back a header message that says "From now on [usually for two years], only connect to this site over HTTPS". That information is saved by the user's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. It is important to note that not all websites that support HTTPS include HSTS response headers. 
 
-Connections to websites that support HSTS are still susceptible to SSLstrip when a connection is made for the first time or if a secure connection has not previously been made (since the browser has not yet received an HSTS header). However, there is an HSTS Preload list that comes with the browser. The browser will not accept an HTTP request from any website on the preload list even if you are visiting the site for the first time. A site on the preload list must support HTTPS throughout its site and provide properly-configured HSTS response headers.
+Connections to websites that implement HSTS are still susceptible to SSLstrip when a connection is made for the first time or if a secure connection has not previously been made (since the browser has not yet received an HSTS header). However, there is an HSTS Preload list that comes with the browser. The browser will not accept an HTTP request from any website on the preload list even if you are visiting the site for the first time. A site on the preload list must support HTTPS throughout its site and provide properly-configured HSTS response headers.
 
 ## Results
 
-In this experiment, an "attacker" is able to use SSLstrip to switch normally encrypted-HTTPS traffic to unencrypted-HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
+In this experiment, an "attacker" is able to use SSLstrip to switch normally encrypted HTTPS traffic to non-encrypted HTTP traffic allowing the attacker to see all the contents of the communications between a client and the sites it accesses. 
 
-The following is an example of what normally happens when we visit http://ny.gov. We see that we are redirected to an HTTPS version of the site (https://www.ny.gov). If you look at the upper-left corner of the video, you will see a green-padlock icon in the address bar and the URL will include https:// which indicate that the connection is encrypted. On the right, the terminal displays insecure content that the someone (other than us or the site) could normally see. (Someone could know we are accessing ny.gov, but not know what we are doing on the site since the content is encrypted.)
+The following is an example of what normally happens when we visit http://ny.gov. We see that we are redirected to an HTTPS version of the site (https://www.ny.gov). If you look at the upper-left corner of the video, you will see a green-padlock icon in the address bar and the URL will include https:// which indicate that the connection is encrypted. On the right, the terminal displays non-encrypted content that the someone (other than us or the site) could normally see. (Someone could know we are accessing ny.gov, but not know what we are doing on the site since the content is encrypted.)
 
 **I have a recording**
 
-When an attacker executes an SSLstrip attack and we visit http://ny.gov, we see that we are served an HTTP version of the site (www.nyu.edu). In the address bar there is no green-padlock icon and there is no https:// since the connection is insecure (Firefox, by default, will trim the URL and not display http://). On the right, the terminal displays the insecure content that the attacker can see which includes all the content that would normally be private.
+When an attacker executes an SSLstrip attack and we visit http://ny.gov, we see that we are served an HTTP version of the site (www.nyu.edu). In the address bar there is no green-padlock icon and there is no https:// since the connection is insecure (Firefox, by default, will trim the URL and not display http://). On the right, the terminal displays the unencrypted content that the attacker can see which includes all the content that would normally be private.
 
 **I have a recording**
 
@@ -320,9 +320,9 @@ to start the SSL stripping proxy.
 
 On the attacker node, run
 ```
-sudo tcpdump -s 1514 -i eth1 'port 80' -U -w - | tee unencrypted.pcap | tcpdump -nnxxXSs 1514 -r -
+sudo tcpdump -s 1514 -i eth1 'port 80' -U -w - | tee non-encrypted.pcap | tcpdump -nnxxXSs 1514 -r -
 ```
-to display the traffic on port 80. This is unencrypted communication between the client and the site that the attacker can see. The output is saved to unencrypted.pcap.
+to display the traffic on port 80. This is non-encrypted communication between the client and the site that the attacker can see. The output is saved to non-encrypted.pcap.
 
 In the Firefox window where NoVNC is running, visit
 
