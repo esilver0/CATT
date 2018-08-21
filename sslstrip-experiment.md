@@ -1,4 +1,4 @@
-In this experiment, we will set up an SSL stripping attack on GENI and will demonstrate what the attack does to the encrypted communication between a client and a site. We will examine what information an “attacker” can see with the attack and under what conditions the attack works.
+In this experiment, we will set up an SSL stripping attack on GENI and will demonstrate what the attack does to the encrypted communication between a client and a site. We will examine what information an “attacker” can see by using the attack and under what conditions the attack works.
 
 It should take about thirty minutes to run this experiment.
 
@@ -11,27 +11,18 @@ To reproduce this experiment on GENI, you will need an account on the [GENI Port
 
 ## Background
 
-SSLstrip is a protocol-downgrade attack that allows an attacker to intercept the contents of an exchange that would normally be confidential.
+SSLstrip is a protocol-downgrade attack that allows an attacker to intercept the contents of an exchange that would normally be confidential. It can occur when an exchange that is supposed to result in a secure (encrypted) connection is initiated insecurely (non-encrypted). E.g. connecting to a site over HTTP that redirects to HTTPS or clicking on a link (to a secure site) from an insecure site.
 
-**In progress**
+The attack involves two steps:
 
+1. The attacker mounts an MITM (man-in-the-middle) attack so that traffic from the target’s device will be sent through the attacker.
+2. When the target visits a website, the attacker acts as a proxy, serving an HTTP (non-encrypted) version of the site to the target. Meanwhile, the attacker relays all of the target's actions on the site to the real destination over HTTPS.
 
-intercept the plaintext contents of an exchange that would normally be confidential. It involves two steps:
+The target can see that the connection is insecure, but does not know whether the connection should be secure. The website that the target visits cannot see the attack and believes the connection to be secure (since it sees an HTTPS connection to the proxy operated by the attacker).
 
-SSLstrip is an attack on HTTP that allows an attacker to intercept the plaintext contents of an exchange that would normally be confidential. It involves two steps:
+[HSTS](https://https.cio.gov/hsts/) (HTTP Strict Transfer Security) is a protocol that helps mitigate SSLstrip attacks. Each time a user establishes an HTTPS connection to a site, the site sends back a header message that says "From now on [usually for two years], only connect to this site over HTTPS". That information is saved by the user's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. It is important to note that not all websites include HSTS response headers. 
 
-1. The attacker mounts an MITM (man-in-the-middle) attack so that traffic from the target device will be sent through the attacker.
-2. When the target visits a website, the attacker acts a proxy, serving an HTTP (non-encrypted) version of the site to the target. Meanwhile, the attacker relays all of the target's actions on the site to the real destination over HTTPS.
-
-The target can see that the connection is unsecure, but does not know whether the connection should be secure. The website that the target visits believes the connection to be secure (since it sees an HTTPS connection to the proxy operated by the attacker).
-
-[HSTS](https://https.cio.gov/hsts/) is a protocol that helps mitigate SSLstrip attacks. Each time a user establishes an HTTPS connection to a site, the site sends back a header message that says "From now on, only connect to this site over HTTPS". That information is saved by the users's browser, and if in the future the browser sees that there is a request over HTTP, it will attempt to switch to HTTPS/or it won't connect. Not all websites support HSTS. It is an opt-in protocol that requires proper configuration. First, the website has to support HTTPS. Second, the website has to include [HSTS response headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security).
-
-Connections to websites that support HSTS are still susceptible to SSLstrip when a connection is made for the first time (or if a secure connection has not previously been made).
-
-
-
-When you visit a website that supports HTTPS, the site can be set up to redirect all traffic to the HTTPS version of the site. When there is an SSLstrip attack and we visit such a site, we will receive an HTTP version of the site.
+Connections to websites that support HSTS are still susceptible to SSLstrip when a connection is made for the first time or if a secure connection has not previously been made (since the browser has not yet received an HSTS header). However, there is an HSTS Preload list that comes with the browser. The browser will not accept an HTTP request from any website on the preload list even if you are visiting the site for the first time. A site on the preload list must support HTTPS throughout its site and provide properly-configured HSTS response headers.
 
 ## Results
 
@@ -70,6 +61,8 @@ In the following example, we connect to http://youtube.com during an SSLstrip at
 First, reserve your resources. You will need one publicly routable IP&mdash;if you are having trouble getting resources, you may use [this monitoring page](https://genimon.uky.edu/status) to find sites with publicly routable IPs available.
 
 In the GENI Portal, create a new slice, then click "Add Resources". Load the RSpec from the URL: https://raw.githubusercontent.com/esilver0/CATT/master/sslstrip_request_rspec.xml
+
+![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/sslstrip_topology_small.png)
 
 This should load a topology onto your canvas, with a client, a router, and an attacker. The RSpec also includes commands to install necessary software on the nodes. Click on "Site 1" and choose an InstaGENI site to bind to, then reserve your resources.
 
@@ -419,8 +412,6 @@ Verify that the connection is via HTTP even though a connection via HTTPS was al
 > _**Note**: At the time of writing, the website did not support HSTS. If you see an HSTS header, the website has since started supporting HSTS. See [Notes](#notes)._
 
 #### Visit a site on the HSTS preload list
-
-The browser will not accept an HTTP (insecure) request from any website on the [HSTS preload list](https://hg.mozilla.org/releases/mozilla-release/file/tip/security/manager/ssl/nsSTSPreloadList.inc) even if you are visiting the site for the first time. A site on the preload list must support HTTPS throughout its site and provide proper HSTS header messages.
 
 In the Firefox window where NoVNC is running, visit
 
