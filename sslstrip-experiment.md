@@ -374,8 +374,6 @@ To see the HSTS header, in the Firefox window where NoVNC is running press Ctrl&
 
 ![](https://raw.githubusercontent.com/esilver0/CATT/SSLv3/Strict-Transport-Security-Header_small.png)
 
-*Optional: Once a site that supports HSTS has been visited with a secure connection, you can delete the history enabling SSLstrip to take effect. See [Delete HSTS history](#delete-hsts-history)*
-
 #### Visit a site that does not support HSTS
 
 On an SSH session on the attacker, run
@@ -410,6 +408,7 @@ for the second time.
 Verify that the connection is via HTTP even though a connection via HTTPS was already established. Using the same steps as before, check on the console to see if you can find an HSTS header (You should not). After you look, you can close the console.
 
 > _**Note**: At the time of writing, the website did not support HSTS. If you see an HSTS header, see [Notes](#notes) for alternative websites._
+
 #### Visit a site on the HSTS preload list
 
 In the Firefox window where NoVNC is running, visit
@@ -419,6 +418,7 @@ http://youtube.com
 for the first time. 
 
 Verify that there is an HTTPS connection and that youtube.com is on the [list](https://hg.mozilla.org/releases/mozilla-release/raw-file/tip/security/manager/ssl/nsSTSPreloadList.inc).
+
 ## Notes
 
 ### Useful Websites
@@ -442,39 +442,5 @@ To reattach to a screen after an SSH connection is lost, run
 ```
 screen -Dr
 ```
-
-### Delete HSTS history
-
-**WARNING:** Make sure this is in the Firefox window where NoVNC is running. You want to delete HSTS history on the client, not on your computer.
-
-In the firefox session enter
-
-```
-about:support
-```
-
-in the address bar on the client.
-
-Copy the file location to the right of "Profile Directory" and "Open Directory". Then close all the tabs in the Firefox window where NoVNC is running. Or you could run in another "client" session, `killall firefox`.
-
-Then run 
-
-<pre>
-nano <b>/users/ers595/.mozilla/firefox/70y24mrv.default</b>/SiteSecurityServiceState.txt
-</pre>
-replacing the part in bold with the file location.
-
-*See WARNING above before proceeding* \
-Clear any line containing the websites you want to remove.
-
-Save the changes, then run
-
-```
-firefox
-```
-
-in the browser.
-
-As far as HSTS is concerned, it is as if an HTTPS connection with the websites were never established in the first place. Keep in mind HSTS is still active&mdash;reconnecting with any of the websites via HTTPS will re-establish HSTS protection for those sites.
 
 ### Exercise
